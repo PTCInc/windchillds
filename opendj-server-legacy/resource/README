@@ -1,43 +1,47 @@
-OpenDJ - Open Source Directory Services in Java
+PTC Windchill Directory Server
 
-This archive contains OpenDJ, an open source, high performance, highly
-available, secure, directory server in Java.
+This archive contains the PTC Windchill Directory Server.  It is powered
+by OpenDJ, an open source directory server written in Java. OpenDJ is a
+downstream build of the OpenDS project.
 
 This product includes software available under the Common Development and
 Distribution License (CDDL).  The complete text for this license, and for
 alternate licenses of included components, may be found in the legal-notices
 directory.
 
-How To Install OpenDJ
+How To Install the PTC Windchill Directory Server
 =====================
-Once you have downloaded and unzipped the OpenDJ directory server binaries,
-you can install OpenDJ in either of two modes:
 
- * Graphical User Interface (GUI) mode. The GUI mode uses QuickSetup, a
-   Java-based graphical tool that enables you to install and configure
-   OpenDJ directory server, load it with data and get it running quickly.
- * Interactive Command-line mode. The interactive command-line utility prompts
-   you for required information before the installation and configuration begin.
+If you are reading this page, you may have already installed WindchillDS.  The
+primary way to install WindchillDS is by using the PTC PSI installation tool.
+This is a convenient Graphical Interface tool that leads you through the
+installation process.  The tool allows you to install WindchillDS as part of a
+Windchill install or allows you to perform a stand-alone WindchillDS
+installation.  Or, you can also install Java along with the WindchillDS
+installation.  For more information about installing WindchillDS, please refer
+to the Windchill Help Center at
+http://support.ptc.com/cs/help/windchill_hc/wc102_hc/
 
 Before You Install
 ------------------
- * A Java SE 7 or later runtime environment must be installed.
- * The system must have at least 100MB of disk space and 256MB of free memory
-   to run OpenDJ directory server for evaluation purposes.
+A Java SE 7 or later runtime environment must be installed either before
+WindchillDS, or as part of the WindchillDS installation.
+It is recommended that your system have at least 200MB of disk space and 512MB
+of free memory to run WindchillDS for a minimal installation.
 
-To Install OpenDJ in GUI mode
------------------------------
- 1. From the top level of your installation directory, run the setup command.
- 2. Answer the questions in the installation wizard.
+See Also
+--------
+ * The Windchill Directory Server Administration Guide
+  (http://support.ptc.com/view?im_dbkey=153784)
+ * The Windchill Help Center
+  (http://support.ptc.com/cs/help/windchill_hc/wc102_hc/)
+ * The PTC Help Center
+  (https://support.ptc.com/appserver/cs/help/help.jsp)
+ * The PTC eSupport Portal
+  (https://support.ptc.com/appserver/cs/portal/)
 
-To Install OpenDJ in Command-Line Mode
---------------------------------------
- 1. From the top level of your installation directory, run the setup command
-    with the --cli option:
-    (Unix, Linux) setup --cli
-    (Windows) setup.bat --cli
- 2. Follow the prompts to provide the required installation information.
-
-
-To learn more about OpenDJ directory services, visit the project site:
-    http://opendj.forgerock.org/
+ * Documentation for OpenDJ, the product that powers the Windchill Directory Server
+ * OpenDJ Version 3.0.0 documentation
+  (http://docs.forgerock.org/en/index.html?product=opendj&version=3)
+ * OpenDJ In process documentation
+  (http://opendj.forgerock.org/docs.html)

@@ -74,7 +74,7 @@ public class InstallWelcomePanel extends QuickSetupStepPanel
               DynamicConstants.SHORT_NAME,
               DynamicConstants.SHORT_NAME,
               Platform.JAVA_MINIMUM_VERSION_NUMBER,
-              DynamicConstants.DOC_REFERENCE_WIKI,
+              DynamicConstants.ADMINISTRATION_GUIDE_URL,
               DynamicConstants.SHORT_NAME),
           LocalizableMessage.class);
   }
