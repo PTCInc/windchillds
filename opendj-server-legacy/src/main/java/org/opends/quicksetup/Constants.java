@@ -52,7 +52,7 @@ public class Constants {
   public static final String HTML_LIST_ITEM_CLOSE = "</li>";
 
   /** Default dynamic name of directory manager. */
-  public static final String DIRECTORY_MANAGER_DN = "cn=Directory Manager";
+  public static final String DIRECTORY_MANAGER_DN = "cn=Manager";
 
   /** Default global admin UID. */
   public static final String GLOBAL_ADMIN_UID = ADSContext.GLOBAL_ADMIN_UID;
