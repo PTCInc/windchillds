@@ -545,7 +545,7 @@ public class NodeRefresher extends AbstractNodeTask {
             }
             else
             {
-              name = unquoteRelativeName(entry.getName())+","+remoteDn;
+              name = normalizeDn(entry.getName())+","+remoteDn;
             }
             entry.setName(name);
             found = true;
@@ -782,7 +782,7 @@ public class NodeRefresher extends AbstractNodeTask {
           }
           else
           {
-            name = unquoteRelativeName(r.getName())+","+parentDn;
+            name = normalizeDn(r.getName())+","+parentDn;
           }
           boolean add = false;
           if (useCustomFilter())
@@ -1161,5 +1161,67 @@ public class NodeRefresher extends AbstractNodeTask {
           State.FAILED, new ReferralLimitExceededException(
               ERR_CTRL_PANEL_REFERRAL_LOOP.get(url.getRawBaseDN())), referral);
     }
+  }
+
+  /**
+   * Normalizes a distinguished name such that unneeded whitespace
+   * is removed.
+   *
+   * @param dn The distinguished name to be normalized.
+   * @return The normalized result.
+   */
+  private static String ldapSpecialCharsDn="#,+<>;/";
+  private String normalizeDn( String dn ) {
+    // When dn contains "/" jndi returned name is doublequote
+    // delimited and contents between doublequotes is correctly
+    // escaped LDAP dn
+    int cursor = 0;
+    if ( dn.startsWith ( "\"" ) && dn.endsWith ( "\"" ) ) {
+      // check for special case of \\" within double quoted value
+      dn = dn.substring (1, dn.length () -1 );
+      if ( dn.contains ( "\\\\\"" ) ) {
+        dn = dn.replace ( "\\\\\"", "\\\"" );
+      }
+      return dn;
+    }
+
+    if ( dn.indexOf ( '\\' ) >= 0 ) {
+      int dnLength = dn.length ();
+      StringBuffer sb = new StringBuffer ( dnLength );
+      cursor = 0;
+      while ( cursor < dnLength ) {
+        char c = dn.charAt ( cursor++ );
+        if ( c == '\\' ) {
+          char next = dn.charAt ( cursor );
+          // check for double escaped special characters - AIX returns these
+          if ( (cursor + 1) < dnLength && ('\\' == next) &&
+              (ldapSpecialCharsDn.indexOf ( dn.charAt ( cursor + 1 ) ) >= 0) ) {
+            // drop double escape for special characters - AIX returns the double escape
+            sb.append ( '\\' );
+            c = dn.charAt ( cursor + 1 );
+            cursor = cursor + 2;
+          } else {
+            int ct = 1;
+            // count number of escape characters
+            while ( cursor < dnLength && dn.charAt ( cursor++ ) == '\\' ) {
+              ct++;
+            }
+            if ( (ct / 2) * 2 != ct ) {
+              ct = (ct + 1) / 2;
+            } else if ( ct >= 2 ) {
+              ct = ct / 2;
+            }
+            // add correct number of escape characters
+            while ( ct-- > 0 ) {
+              sb.append ( '\\' );
+            }
+            c = dn.charAt ( cursor - 1 );
+          }
+        }
+        sb.append ( c );
+      }
+      dn = sb.toString ();
+    }
+    return dn;
   }
 }
