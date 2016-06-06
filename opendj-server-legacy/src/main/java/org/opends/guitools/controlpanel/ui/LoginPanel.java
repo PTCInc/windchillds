@@ -108,7 +108,7 @@ public class LoginPanel extends StatusGenericPanel
     add(dnLabel, gbc);
     gbc.insets.left = 10;
     gbc.gridx = 1;
-    dn = Utilities.createTextField("cn=Directory Manager", 20);
+    dn = Utilities.createTextField("cn=Manager", 10);
     gbc.weightx = 1.0;
     gbc.fill = GridBagConstraints.HORIZONTAL;
     add(dn, gbc);

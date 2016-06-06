@@ -99,7 +99,7 @@ public class ControlPanelArgumentParser extends ArgumentParser
    */
   public static String getDefaultBindDN()
   {
-    return "cn=Directory Manager";
+    return "cn=Manager";
   }
 
   /**
