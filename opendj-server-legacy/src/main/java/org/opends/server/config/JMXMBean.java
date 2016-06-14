@@ -673,7 +673,7 @@ monitorLoop:
         {
           try
           {
-            method.invoke(component, params);
+            return method.invoke(component, params);
           }
           catch (MBeanException me)
           {
