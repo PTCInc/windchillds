@@ -52,6 +52,12 @@
         <enabled>false</enabled>
       </snapshots>
     </repository>
+
+   <repository>
+      <id>windchillds</id>
+      <name>WindchillDS PTC Libraries</name>
+      <url>file:${project.basedir}/repo</url>
+    </repository>
   </repositories>
 
   <properties>
@@ -232,6 +238,55 @@
       <groupId>org.forgerock.commons</groupId>
       <artifactId>forgerock-persistit-core</artifactId>
       <version>4.3.1</version>
+    </dependency>
+
+    <!-- PTC libraries -->
+    <dependency>
+      <groupId>com.ptc.windchillds</groupId>
+      <artifactId>log4j</artifactId>
+      <version>1.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.ptc.windchillds</groupId>
+      <artifactId>WDS_MBeanResource</artifactId>
+      <version>1.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.ptc.windchillds</groupId>
+      <artifactId>WtHttpClientAddOns</artifactId>
+      <version>1.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.ptc.windchillds</groupId>
+      <artifactId>WtJmxApt</artifactId>
+      <version>1.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.ptc.windchillds</groupId>
+      <artifactId>WtJmxConnLog</artifactId>
+      <version>1.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.ptc.windchillds</groupId>
+      <artifactId>WtJmxCore</artifactId>
+      <version>1.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.ptc.windchillds</groupId>
+      <artifactId>WtJmxCoreMBeans</artifactId>
+      <version>1.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.ptc.windchillds</groupId>
+      <artifactId>WtLogR</artifactId>
+      <version>1.0</version>
     </dependency>
   </dependencies>
 

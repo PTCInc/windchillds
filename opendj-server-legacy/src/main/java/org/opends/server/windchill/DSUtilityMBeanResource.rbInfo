@@ -1,0 +1,37 @@
+#HEADER: Created by wt.annotations.processors.MBeanInterfaceProcessor from org.opends.server.windchill.DSUtilityMBean
+#Wed Jan 19 10:51:51 CST 2011
+ResourceInfo.deprecated=false
+ResourceInfo.customizable=true
+ResourceInfo.class=wt.tools.resource.StringResourceInfo
+#BODY: Created by wt.annotations.processors.MBeanInterfaceProcessor from org.opends.server.windchill.DSUtilityMBean
+#Wed Jan 19 10:51:51 CST 2011
+getSystemProperties__descr.value=Get all System Property values.
+setSystemProperty__java_lang_String__java_lang_String__param_0__name.comment=DO NOT TRANSLATE\!  This is the name of a parameter to a JMX MBean operation and should be left as-is for consistency with our Javadoc which is currently untranslated.
+unsetSystemProperty__java_lang_String__param_0__name.value=propertyName
+unsetSystemProperty__java_lang_String__descr.value=Unset System Property value.
+setSystemProperty__java_lang_String__java_lang_String__param_1__name.comment=DO NOT TRANSLATE\!  This is the name of a parameter to a JMX MBean operation and should be left as-is for consistency with our Javadoc which is currently untranslated.
+displaySystemProperties__descr.value=Display all System Property values.
+unsetSystemProperty__java_lang_String__param_0__name.comment=DO NOT TRANSLATE\!  This is the name of a parameter to a JMX MBean operation and should be left as-is for consistency with our Javadoc which is currently untranslated.
+getServerVersion__descr.value=Get Server Version.
+displayDSInfo__descr.value=Display Directory Info.
+unsetSystemProperty__java_lang_String__param_0__descr.value=of property to set.
+setSystemProperty__java_lang_String__java_lang_String__descr.value=Set System Property value.
+getSystemProperty__java_lang_String__param_0__name.value=propertyName
+getSystemProperty__java_lang_String__param_0__name.comment=DO NOT TRANSLATE\!  This is the name of a parameter to a JMX MBean operation and should be left as-is for consistency with our Javadoc which is currently untranslated.
+getSystemProperty__java_lang_String__descr.value=Get System Property value.
+getFileSeparator__descr.value=Get File Separator.
+getSystemName__descr.value=Get System Name.
+getDSInfo__descr.value=Get Directory Info.
+setSystemProperty__java_lang_String__java_lang_String__param_0__name.value=propertyName
+setSystemProperty__java_lang_String__java_lang_String__param_0__descr.value=of property to set.
+getInstallDir__descr.value=Get the Directory Installation Directory.
+DSUtilityMBean__descr.value=Provides methods to display and set properties and other utility functions.
+setSystemProperty__java_lang_String__java_lang_String__param_1__descr.value=is the value to set it to.
+getBuildID__descr.value=Get the Directory Server Build ID.
+getJVMArchitecture__descr.value=Get JVM Architecture string.
+getOperatingSystem__descr.value=Get Operating system.
+getSystemProperty__java_lang_String__param_0__descr.value=of System property to view.
+setSystemProperty__java_lang_String__java_lang_String__param_1__name.value=propertyValue
+getEnvVariables__descr.value=Get Environment values.
+getInstanceDir__descr.value=Get Directory Instance Directory.
+displayEnvVariables__descr.value=Display Environment values.
