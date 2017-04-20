@@ -3,6 +3,9 @@ changetype: modify
 replace: ds-cfg-notify-abandoned-operations
 ds-cfg-notify-abandoned-operations: true
 -
+replace: ds-cfg-reject-unauthenticated-requests
+ds-cfg-reject-unauthenticated-requests: false
+-
 
 dn: cn=LDAP Connection Handler,cn=Connection Handlers,cn=config
 changeType: modify
@@ -47,6 +50,10 @@ dn: cn=JMX Connection Handler,cn=Connection Handlers,cn=config
 changeType: modify
 replace: ds-cfg-listen-port
 ds-cfg-listen-port: #jmxport#
+-
+replace: ds-cfg-enabled
+ds-cfg-enabled: false
+-
 
 dn: cn=File-Based Access Logger,cn=Loggers,cn=config
 changetype: modify
@@ -73,6 +80,31 @@ dn: cn=Default Password Policy,cn=Password Policies,cn=config
 changetype: modify
 add: ds-cfg-password-validator
 ds-cfg-password-validator: cn=Test Password Validator,cn=Password Validators,cn=config
+-
+replace: ds-cfg-allow-pre-encoded-passwords
+ds-cfg-allow-pre-encoded-passwords: false
+-
+replace: ds-cfg-lockout-duration
+ds-cfg-lockout-duration: 0 seconds
+-
+replace: ds-cfg-lockout-failure-expiration-interval
+ds-cfg-lockout-failure-expiration-interval: 0 seconds
+-
+replace: ds-cfg-lockout-failure-count
+ds-cfg-lockout-failure-count: 0
+-
+
+dn: cn=Root Password Policy,cn=Password Policies,cn=config
+changetype: modify
+replace: ds-cfg-lockout-duration
+ds-cfg-lockout-duration: 0 seconds
+-
+replace: ds-cfg-lockout-failure-expiration-interval
+ds-cfg-lockout-failure-expiration-interval: 0 seconds
+-
+replace: ds-cfg-lockout-failure-count
+ds-cfg-lockout-failure-count: 0
+-
 
 dn: cn=SSHA512 UserPassword Policy,cn=Password Policies,cn=config
 changetype: add
@@ -1577,10 +1609,19 @@ ds-cfg-ldif-file: config/ldif-backend.ldif
 dn: cn=File-Based Debug Logger,cn=Loggers,cn=config
 changetype: modify
 replace: ds-cfg-enabled
-ds-cfg-enabled: false
+ds-cfg-enabled: true
 -
 replace: ds-cfg-default-include-throwable-cause
 ds-cfg-default-include-throwable-cause: true
 -
 replace: ds-cfg-default-throwable-stack-frames
 ds-cfg-default-throwable-stack-frames: 500
+-
+
+dn: cn=Root DNs,cn=config
+changetype: modify
+delete: ds-cfg-default-root-privilege-name
+ds-cfg-default-root-privilege-name: jmx-read
+ds-cfg-default-root-privilege-name: jmx-write
+ds-cfg-default-root-privilege-name: jmx-notify
+-

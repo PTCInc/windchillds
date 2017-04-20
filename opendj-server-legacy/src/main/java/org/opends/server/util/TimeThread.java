@@ -23,6 +23,7 @@
  *
  *      Copyright 2006-2009 Sun Microsystems, Inc.
  *      Portions Copyright 2011-2015 ForgeRock AS.
+ *      Portions Copyright 2013 ptc Inc. (PTC) 
  */
 package org.opends.server.util;
 
@@ -86,6 +87,13 @@ public final class TimeThread
 
     /** The date formatter that will be used to obtain the local timestamp. */
     private final SimpleDateFormat localTimestampFormatter;
+    
+    // The timestamp for this time thread in the local time zone.
+    private String localTimestampMillis;
+    
+    // The date formatter that will be used to obtain the local
+    // timestamp with milliseconds.
+    private final SimpleDateFormat localTimestampMillisFormatter;
 
     /** The current time in nanoseconds. */
     private volatile long nanoTime;
@@ -122,6 +130,9 @@ public final class TimeThread
 
       localTimestampFormatter =
           new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss Z");
+          
+      localTimestampMillisFormatter = 
+          new SimpleDateFormat("dd/MMM/yyyy:HH:mm:ss.SSS Z");
 
       // Populate initial values.
       run();
@@ -141,6 +152,7 @@ public final class TimeThread
         nanoTime = System.nanoTime();
         generalizedTime = GeneralizedTimeSyntax.format(date);
         localTimestamp = localTimestampFormatter.format(date);
+        localTimestampMillis = localTimestampMillisFormatter.format(date);
         gmtTimestamp = gmtTimestampFormatter.format(date);
         hourAndMinute =
             calendar.get(Calendar.HOUR_OF_DAY) * 100
@@ -286,6 +298,22 @@ public final class TimeThread
     return INSTANCE.timeInfo.localTimestamp;
   }
 
+
+  /**
+   * Retrieves a string containing the current time in the local time
+   * zone. The timestamp format will look like
+   * "01/Jan/2005:00:00:00.000 -0600".
+   *
+   * @return A string containing the current time in the local time
+   *         zone.
+   * @throws IllegalStateException
+   *           If the time service has not been started.
+   */
+  public static String getLocalTimeMillis() throws IllegalStateException
+  {
+    checkState();
+    return INSTANCE.timeInfo.localTimestampMillis;
+  }
 
 
   /**

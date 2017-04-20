@@ -23,6 +23,7 @@
  *
  *      Copyright 2006-2010 Sun Microsystems, Inc.
  *      Portions Copyright 2010-2015 ForgeRock AS.
+ *      Portions Copyright 2013 PTC Inc. (PTC)
  */
 package org.opends.server.core;
 
@@ -202,6 +203,7 @@ import org.opends.server.types.VirtualAttributeRule;
 import org.opends.server.types.WritabilityMode;
 import org.opends.server.util.ActivateOnceNewConfigFrameworkIsUsed;
 import org.opends.server.util.ActivateOnceSDKSchemaIsUsed;
+import org.opends.server.windchill.MBeanStartup;
 import org.opends.server.util.BuildVersion;
 import org.opends.server.util.MultiOutputStream;
 import org.opends.server.util.RemoveOnceSDKSchemaIsUsed;
@@ -7425,6 +7427,8 @@ public final class DirectoryServer
       System.err.println(message);
       System.exit(1);
     }
+
+    new MBeanStartup ();
 
     try
     {

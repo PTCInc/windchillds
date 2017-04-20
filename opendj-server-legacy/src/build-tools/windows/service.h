@@ -23,6 +23,7 @@
  *
  *      Copyright 2008 Sun Microsystems, Inc.
  *      Portions Copyright 2013 ForgeRock AS.
+ *      Portions Copyright 2013 PTC Inc. (PTC)
  */
 
 #include "common.h"
@@ -44,9 +45,9 @@
 // ----------------------------------------------------
 
 #define TIMEOUT_NONE              0
-#define TIMEOUT_CREATE_EVENT   5000
-#define TIMEOUT_START_SERVICE 30000
-#define TIMEOUT_STOP_SERVICE  30000
+#define TIMEOUT_CREATE_EVENT   15000
+#define TIMEOUT_START_SERVICE 180000
+#define TIMEOUT_STOP_SERVICE  100000
 
 // ----------------------------------------------------
 // The first value to use for checkpoints

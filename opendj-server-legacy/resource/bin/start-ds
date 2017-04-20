@@ -24,6 +24,7 @@
 #
 #      Copyright 2006-2009 Sun Microsystems, Inc.
 #      Portions Copyright 2011-2014 ForgeRock AS
+#      Portions Copyright 2013 PTC Inc. (PTC)
 
 
 # Capture the current working directory so that we can change to it later.
@@ -102,15 +103,15 @@ then
   nohup "${OPENDJ_JAVA_BIN}" ${OPENDJ_JAVA_ARGS} ${SCRIPT_NAME_ARG} \
        org.opends.server.core.DirectoryServer \
        --configClass org.opends.server.extensions.ConfigFileHandler \
-       --configFile "${CONFIG_FILE}" "${@}" > "${LOG_FILE}" 2>&1 &
+       --configFile "${CONFIG_FILE}" "${@}" >> "${LOG_FILE}" 2>&1 &
   echo $! > "${PID_FILE}"
   if test ${EC} -eq 99
   then
     "${OPENDJ_JAVA_BIN}" -client org.opends.server.tools.WaitForFileDelete \
-         --targetFile "${STARTING_FILE}" --logFile "${LOG_FILE}" "${@}"
+         --targetFile "${STARTING_FILE}" --logFile "${LOG_FILE}"
   else
     "${OPENDJ_JAVA_BIN}" -client org.opends.server.tools.WaitForFileDelete \
-         --targetFile "${STARTING_FILE}" "${@}"
+         --targetFile "${STARTING_FILE}"
   fi
   EC=${?}
   if test ${EC} -eq 0
@@ -118,7 +119,7 @@ then
     # An exit code of 98 means that the server is already running.
   	"${OPENDJ_JAVA_BIN}" -client ${SCRIPT_NAME_ARG} org.opends.server.core.DirectoryServer \
             --configClass org.opends.server.extensions.ConfigFileHandler \
-            --configFile "${CONFIG_FILE}" --checkStartability > /dev/null 2>&1
+            --configFile "${CONFIG_FILE}" --checkStartability "${@}" > /dev/null 2>&1
     EC=${?}
     if test ${EC} -eq 98
     then
@@ -136,7 +137,7 @@ else
     # run no detach
     #
     echo $$ > "${PID_FILE}"
-    rm -f "${LOG_FILE}"
+    # rm -f "${LOG_FILE}"
     exec "${OPENDJ_JAVA_BIN}" ${OPENDJ_JAVA_ARGS} ${SCRIPT_NAME_ARG} \
       org.opends.server.core.DirectoryServer \
       --configClass org.opends.server.extensions.ConfigFileHandler \
@@ -147,7 +148,7 @@ else
     # run no detach quiet
     #
     echo $$ > "${PID_FILE}"
-    rm -f "${LOG_FILE}"
+    # rm -f "${LOG_FILE}"
     exec "${OPENDJ_JAVA_BIN}" ${OPENDJ_JAVA_ARGS} ${SCRIPT_NAME_ARG} \
       org.opends.server.core.DirectoryServer \
       --configClass org.opends.server.extensions.ConfigFileHandler \

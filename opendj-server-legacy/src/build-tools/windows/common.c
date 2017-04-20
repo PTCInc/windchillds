@@ -23,6 +23,7 @@
 *
 *      Copyright 2008-2010 Sun Microsystems, Inc.
 *      Portions Copyright 2013 ForgeRock AS
+*      Portions Copyright 2013 PTC Inc. (PTC)
 */
 
 #include "common.h"
@@ -33,6 +34,12 @@
 #include <stdio.h>
 #include <sys/locking.h>
 #include <time.h>
+#if defined _MSC_VER
+#include <direct.h>
+#elif defined __GNUC__
+#include <sys/types.h>
+#include <sys/stat.h>
+#endif
 
 BOOL DEBUG = TRUE;
 char * DEBUG_LOG_NAME = "native-windows.out";
@@ -356,7 +363,11 @@ char * getDebugLogFileName()
     sprintf(path, "%s\\logs\\%s", execName, DEBUG_LOG_NAME);
   } else {
     strcat(temp, "\\logs\\");
-    mkdir(temp);
+    #if defined _MSC_VER
+        _mkdir(temp);
+    #elif defined __GNUC__
+        mkdir(temp);
+    #endif
     strcat(temp, DEBUG_LOG_NAME);
     file = fopen(temp,"a+");
     fclose(file);

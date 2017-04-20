@@ -24,6 +24,7 @@
   !
   !      Copyright 2007-2009 Sun Microsystems, Inc.
   !      Portions copyright 2011-2015 ForgeRock AS.
+  !      Portions copyright 2013 PTC Inc. (PTC)  
   ! -->
 <adm:managed-object name="file-based-access-log-publisher"
   plural-name="file-based-access-log-publishers"
@@ -309,7 +310,7 @@
     </adm:synopsis>
     <adm:default-behavior>
       <adm:defined>
-        <adm:value>dd/MMM/yyyy:HH:mm:ss Z</adm:value>
+        <adm:value>dd/MMM/yyyy:HH:mm:ss.SSS Z</adm:value>
       </adm:defined>
     </adm:default-behavior>
    <adm:syntax>

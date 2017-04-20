@@ -23,6 +23,7 @@
  *
  *      Copyright 2006-2009 Sun Microsystems, Inc.
  *      Portions Copyright 2011-2015 ForgeRock AS
+ *      Portions Copyright 2013 PTC Inc. (PTC)
  */
 package org.opends.server.loggers;
 
@@ -89,7 +90,7 @@ public final class TextAccessLogPublisher extends
   private FileBasedAccessLogPublisherCfg cfg;
   private boolean isCombinedMode;
   private boolean includeControlOIDs;
-  private String timeStampFormat = "dd/MMM/yyyy:HH:mm:ss Z";
+  private String timeStampFormat = "dd/MMM/yyyy:HH:mm:ss.SSS Z";
   private ServerContext serverContext;
 
   @Override

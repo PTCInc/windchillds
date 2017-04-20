@@ -24,6 +24,7 @@
 #
 #      Copyright 2008-2010 Sun Microsystems, Inc.
 #      Portions Copyright 2010-2015 ForgeRock AS
+#      Portions Copyright 2013 PTC Inc. (PTC)
 
 #
 # Display an error message
@@ -55,6 +56,38 @@ test_java_home() {
 }
 
 #
+# function that tests the java executable in the PATH env variable.
+#
+test_java_path() {
+  OPENDJ_JAVA_BIN=`which java 2> /dev/null`
+  if test -f "${OPENDJ_JAVA_BIN}"
+  then
+    export OPENDJ_JAVA_BIN
+  else
+    display_java_not_found_error
+	exit 1
+  fi
+}
+
+#
+# function that tests the JAVA_HOME env variable.
+#
+test_java_home() {
+  if test -z "${JAVA_HOME}"
+  then
+    test_java_path
+  else
+    OPENDJ_JAVA_BIN="${JAVA_HOME}/bin/java"
+    if test -f "${OPENDJ_JAVA_BIN}"
+    then
+      export OPENDJ_JAVA_BIN
+    else
+      test_java_path
+    fi
+  fi
+}
+
+#
 # function that tests the JAVA_BIN env variable.
 #
 test_java_bin() {
@@ -72,36 +105,6 @@ test_java_bin() {
   fi
 }
 
-#
-# function that tests the java executable in the PATH env variable.
-#
-test_java_path() {
-  OPENDJ_JAVA_BIN=`which java 2> /dev/null`
-  if test -f "${OPENDJ_JAVA_BIN}"
-  then
-    export OPENDJ_JAVA_BIN
-  else
-    test_java_bin
-  fi
-}
-
-#
-# function that tests legacy OPENDS_JAVA_HOME env variable.
-#
-test_opends_java_home() {
-  if test -z "${OPENDS_JAVA_HOME}"
-  then
-    test_java_path
-  else
-    OPENDJ_JAVA_BIN="${OPENDS_JAVA_HOME}/bin/java"
-    if test -f "${OPENDJ_JAVA_BIN}"
-    then
-      export OPENDJ_JAVA_BIN
-    else
-      test_java_path
-    fi
-  fi
-}
 
 #
 # function that tests the OPENDJ_JAVA_HOME env variable.
@@ -109,14 +112,14 @@ test_opends_java_home() {
 test_opendj_java_home() {
   if test -z "${OPENDJ_JAVA_HOME}"
   then
-    test_opends_java_home
+    test_java_bin
   else
     OPENDJ_JAVA_BIN="${OPENDJ_JAVA_HOME}/bin/java"
     if test -f "${OPENDJ_JAVA_BIN}"
     then
       export OPENDJ_JAVA_BIN
     else
-      test_java_path
+      test_java_bin
     fi
   fi
 }
@@ -127,25 +130,13 @@ test_opendj_java_home() {
 test_opendj_java_bin() {
   if test -z "${OPENDJ_JAVA_BIN}"
   then
-    # Check for legacy OPENDS_JAVA_BIN
-    if test -z "${OPENDS_JAVA_BIN}"
-    then
-      test_opendj_java_home
-    else
-      if test -f "${OPENDS_JAVA_BIN}"
-      then
-        OPENDJ_JAVA_BIN="${OPENDS_JAVA_BIN}"
-        export OPENDJ_JAVA_BIN
-      else
-        test_opendj_java_home
-      fi
-    fi
+    test_opendj_java_home
   else
     if test -f "${OPENDJ_JAVA_BIN}"
     then
       export OPENDJ_JAVA_BIN
     else
-      test_opends_java_home
+      test_opendj_java_home
     fi
   fi
 }
@@ -159,18 +150,6 @@ set_java_home_and_args() {
     . "${INSTANCE_ROOT}/lib/set-java-home"
   fi
   test_opendj_java_bin
-}
-
-# Function that sets OPENDJ_JAVA_ARGS if not yet set but OPENDS_JAVA_ARGS is.
-test_java_args() {
-  if test -z "${OPENDJ_JAVA_ARGS}"
-  then
-    if test -n "${OPENDS_JAVA_ARGS}"
-    then
-      OPENDJ_JAVA_ARGS="${OPENDS_JAVA_ARGS}"
-      export OPENDJ_JAVA_ARGS
-    fi
-  fi
 }
 
 # Determine whether the detected Java environment is acceptable for use.
@@ -252,7 +231,7 @@ set_environment_vars() {
 
 # Configure the appropriate CLASSPATH for server, using Opend DJ logger.
 set_opendj_logger_classpath() {
-  CLASSPATH="${INSTANCE_ROOT}/classes"
+  CLASSPATH="${INSTANCE_ROOT}/classes":"${INSTANCE_ROOT}/config"
   CLASSPATH="${CLASSPATH}:${INSTALL_ROOT}/lib/bootstrap.jar"
   if [ "${INSTALL_ROOT}" != "${INSTANCE_ROOT}" ]
   then
@@ -266,7 +245,7 @@ set_opendj_logger_classpath() {
 
 # Configure the appropriate CLASSPATH for client, using java.util.logging logger.
 set_classpath() {
-  CLASSPATH="${INSTANCE_ROOT}/classes"
+  CLASSPATH="${INSTANCE_ROOT}/classes":"${INSTANCE_ROOT}/config"
   CLASSPATH="${CLASSPATH}:${INSTALL_ROOT}/lib/bootstrap-client.jar"
   if [ "${INSTALL_ROOT}" != "${INSTANCE_ROOT}" ]
   then
@@ -362,14 +341,12 @@ then
   set_java_home_and_args
   set_environment_vars
   set_classpath
-  test_java_args
   test_java
 elif test "${SCRIPT_UTIL_CMD}" = "set-full-server-environment-and-test-java"
 then
   set_java_home_and_args
   set_environment_vars
   set_opendj_logger_classpath
-  test_java_args
   test_java
 elif test "${SCRIPT_UTIL_CMD}" = "set-full-environment"
 then

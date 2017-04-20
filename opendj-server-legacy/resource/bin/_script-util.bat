@@ -23,6 +23,7 @@ rem
 rem
 rem      Copyright 2008-2010 Sun Microsystems, Inc.
 rem      Portions Copyright 2011-2015 ForgeRock AS
+rem      Portions Copyright 2013 PTC Inc. (PTC)
 
 set SET_JAVA_HOME_AND_ARGS_DONE=false
 set SET_ENVIRONMENT_VARS_DONE=false
@@ -60,12 +61,13 @@ goto scriptBegin
 rem Configure the appropriate CLASSPATH for client, using java.util.logging logger.
 :setClassPath
 if "%SET_CLASSPATH_DONE%" == "true" goto end
+set CLASSPATH=""
 rem get the absolute paths before building the classpath
 rem it also helps comparing the two paths
 FOR /F %%i IN ("%INSTALL_ROOT%")  DO set INSTALL_ROOT=%%~dpnxi
 FOR /F %%i IN ("%INSTANCE_ROOT%") DO set INSTANCE_ROOT=%%~dpnxi
 call "%INSTALL_ROOT%\lib\setcp.bat" %INSTALL_ROOT%\lib\bootstrap-client.jar
-set CLASSPATH=%INSTANCE_ROOT%\classes;%CLASSPATH%
+set CLASSPATH=%INSTANCE_ROOT%\classes;%INSTANCE_ROOT%\config;%CLASSPATH%
 if "%INSTALL_ROOT%" == "%INSTANCE_ROOT%" goto setClassPathDone
 FOR %%x in ("%INSTANCE_ROOT%\lib\*.jar") DO call "%INSTANCE_ROOT%\lib\setcp.bat" %%x
 :setClassPathDone
@@ -114,32 +116,14 @@ set SET_JAVA_HOME_AND_ARGS_DONE=true
 goto scriptBegin
 
 :checkEnvJavaHome
-if "%OPENDJ_JAVA_BIN%" == "" goto checkEnvLegacyJavaHome
-if not exist "%OPENDJ_JAVA_BIN%" goto checkEnvLegacyJavaHome
-goto endJavaHomeAndArgs
-
-:checkEnvLegacyJavaHome
-if "%OPENDS_JAVA_BIN%" == "" goto checkOpenDJJavaHome
-if not exist "%OPENDS_JAVA_BIN%" goto checkOpenDJJavaHome
-set OPENDJ_JAVA_BIN=%OPENDS_JAVA_BIN%
+if "%OPENDJ_JAVA_BIN%" == "" goto checkOpenDJJavaHome
+if not exist "%OPENDJ_JAVA_BIN%" goto checkOpenDJJavaHome
 goto endJavaHomeAndArgs
 
 :checkOpenDJJavaHome
-if "%OPENDJ_JAVA_HOME%" == "" goto checkLegacyOpenDSJavaHome
-if not exist "%OPENDJ_JAVA_HOME%\bin\java.exe" goto checkLegacyOpenDSJavaHome
+if "%OPENDJ_JAVA_HOME%" == "" goto checkJavaBin
+if not exist "%OPENDJ_JAVA_HOME%\bin\java.exe" goto checkJavaBin
 set OPENDJ_JAVA_BIN=%OPENDJ_JAVA_HOME%\bin\java.exe
-goto endJavaHomeAndArgs
-
-:checkLegacyOpenDSJavaHome
-if "%OPENDS_JAVA_HOME%" == "" goto checkJavaPath
-if not exist "%OPENDS_JAVA_HOME%\bin\java.exe" goto checkJavaPath
-set OPENDJ_JAVA_BIN=%OPENDS_JAVA_HOME%\bin\java.exe
-goto endJavaHomeAndArgs
-
-:checkJavaPath
-java.exe -version > NUL 2>&1
-if not %errorlevel% == 0 goto checkJavaBin
-set OPENDJ_JAVA_BIN=java.exe
 goto endJavaHomeAndArgs
 
 :checkJavaBin
@@ -149,9 +133,15 @@ set OPENDJ_JAVA_BIN=%JAVA_BIN%
 goto endJavaHomeAndArgs
 
 :checkJavaHome
-if "%JAVA_HOME%" == "" goto noJavaFound
-if not exist "%JAVA_HOME%\bin\java.exe" goto noJavaFound
+if "%JAVA_HOME%" == "" goto checkJavaPath
+if not exist "%JAVA_HOME%\bin\java.exe" goto checkJavaPath
 set OPENDJ_JAVA_BIN=%JAVA_HOME%\bin\java.exe
+goto endJavaHomeAndArgs
+
+:checkJavaPath
+java.exe -version > NUL 2>&1
+if not %errorlevel% == 0 goto noJavaFound
+set OPENDJ_JAVA_BIN=java.exe
 goto endJavaHomeAndArgs
 
 :noJavaFound
@@ -178,18 +168,11 @@ set SET_ENVIRONMENT_VARS_DONE=true
 goto scriptBegin
 
 :testJava
-if "%OPENDJ_JAVA_ARGS%" == "" goto checkLegacyArgs
-:continueTestJava
 "%OPENDJ_JAVA_BIN%" %OPENDJ_JAVA_ARGS% org.opends.server.tools.InstallDS --testonly > NUL 2>&1
 set RESULT_CODE=%errorlevel%
 if %RESULT_CODE% == 13 goto notSupportedJavaHome
 if not %RESULT_CODE% == 0 goto noValidJavaHome
 goto end
-
-:checkLegacyArgs
-if "%OPENDS_JAVA_ARGS%" == "" goto continueTestJava
-set OPENDJ_JAVA_ARGS=%OPENDS_JAVA_ARGS%
-goto continueTestJava
 
 :noValidJavaHome
 if NOT "%OPENDJ_JAVA_ARGS%" == "" goto noValidHomeWithArgs

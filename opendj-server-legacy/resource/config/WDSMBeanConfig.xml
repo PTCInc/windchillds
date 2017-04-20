@@ -1,0 +1,791 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="1.6.0_23" class="java.beans.XMLDecoder"> 
+ <void id="MBeanLoader0" property="owner"/> 
+ <object id="Emailer0" class="wt.jmx.core.mbeans.Emailer"> 
+  <void id="ArrayList0" property="emailLists"> 
+   <void method="add"> 
+    <object class="wt.jmx.core.mbeans.EmailList"> 
+     <object idref="Emailer0"/> 
+     <string>JMX-Administrators</string> 
+    </object> 
+   </void> 
+  </void> 
+  <void property="emailLists"> 
+   <object idref="ArrayList0"/> 
+  </void> 
+  <void property="ownerMBean"> 
+   <object idref="MBeanLoader0"/> 
+  </void> 
+ </object> 
+ <object class="wt.jmx.core.mbeans.Dumper"> 
+  <void property="deadlockCheckIntervalSeconds"> 
+   <int>150</int> 
+  </void> 
+  <void property="ownerMBean"> 
+   <object idref="MBeanLoader0"/> 
+  </void> 
+ </object> 
+ <object class="org.opends.server.windchill.DSUtility"> 
+  <void property="ownerMBean"> 
+   <object idref="MBeanLoader0"/> 
+  </void> 
+ </object> 
+ <object class="org.opends.server.windchill.DSCollector"> 
+  <void property="ownerMBean"> 
+   <object idref="MBeanLoader0"/> 
+  </void> 
+ </object> 
+ <object class="org.opends.server.windchill.DSLogsDirViewer"> 
+  <void property="ownerMBean"> 
+   <object idref="MBeanLoader0"/> 
+  </void> 
+ </object> 
+ <object class="wt.log4j.jmx.LoggerRepositoryMonitor"> 
+  <void property="filterMap"> 
+   <null/> 
+  </void> 
+  <void property="ownerMBean"> 
+   <object idref="MBeanLoader0"/> 
+  </void> 
+ </object> 
+ <object id="NotificationHandlerManager0" class="wt.jmx.core.mbeans.NotificationHandlerManager"> 
+  <void id="ArrayList1" property="notificationHandlers"> 
+   <void method="add"> 
+    <object class="wt.jmx.core.mbeans.NotificationHandler"> 
+     <object idref="NotificationHandlerManager0"/> 
+     <string>DeadlockNotifier</string> 
+     <object class="javax.management.ObjectName"> 
+      <string>$$${BASE_OBJECT_NAME}$$$,wt.subsystem=Dumper</string> 
+     </object> 
+     <void property="emailRecipientListName"> 
+      <string>JMX-Administrators</string> 
+     </void> 
+     <void property="emailSubject"> 
+      <string>Deadlocked threads detected</string> 
+     </void> 
+     <void id="ArrayList2" property="infoItems"> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>Name</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=Runtime</string> 
+         </object> 
+        </void> 
+        <void property="displayName"> 
+         <string>JVM Name</string> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>FullStackTrace</string> 
+        </void> 
+        <void property="displayName"> 
+         <string>Full Stack Trace</string> 
+        </void> 
+       </object> 
+      </void> 
+     </void> 
+     <void property="infoItems"> 
+      <object idref="ArrayList2"/> 
+     </void> 
+     <void property="logAsLevel"> 
+      <string>ERROR</string> 
+     </void> 
+     <void property="logger"> 
+      <string>wt.jmx.notify.deadlock</string> 
+     </void> 
+     <void property="multiLineFormat"> 
+      <boolean>true</boolean> 
+     </void> 
+     <void property="loggerLevel"> 
+      <string>WARN</string> 
+     </void> 
+    </object> 
+   </void> 
+   <void method="add"> 
+    <object id="NotificationHandler0" class="wt.jmx.core.mbeans.NotificationHandler"> 
+     <object idref="NotificationHandlerManager0"/> 
+     <string>GarbageCollectionNotifier</string> 
+     <object class="javax.management.ObjectName"> 
+      <string>$$${BASE_OBJECT_NAME}$$$,wt.subsystem=Monitors,wt.monitorType=GarbageCollection</string> 
+     </object> 
+     <void property="customDelegateFactoryMap"> 
+      <object class="wt.jmx.core.mbeans.NamedChildSupport$SpecialMap"> 
+       <void method="put"> 
+        <string>PeriodicStackLoggingDelegate</string> 
+        <object class="wt.jmx.core.mbeans.PeriodicStackLoggingDelegate"> 
+         <string>PeriodicStackLoggingDelegate</string> 
+         <void property="ownerMBean"> 
+          <object idref="NotificationHandler0"/> 
+         </void> 
+         <void property="startTracingNotificationTypes"> 
+          <string>wt.jmx.core.mbeans.GarbageCollectionMonitorMBean.percentTimeSpentInGCThreshold.exceeded.initial</string> 
+         </void> 
+         <void property="stopTracingNotificationTypes"> 
+          <string>wt.jmx.core.mbeans.GarbageCollectionMonitorMBean.percentTimeSpentInGCThreshold.exceeded.nolonger</string> 
+         </void> 
+        </object> 
+       </void> 
+      </object> 
+     </void> 
+     <void property="emailRecipientListName"> 
+      <string>JMX-Administrators</string> 
+     </void> 
+     <void property="emailSubject"> 
+      <string>Garbage collection threshold exceeded</string> 
+     </void> 
+     <void id="ArrayList3" property="infoItems"> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>Name</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=Runtime</string> 
+         </object> 
+        </void> 
+        <void property="displayName"> 
+         <string>JVM Name</string> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>PercentTimeSpentInGCThreshold</string> 
+        </void> 
+        <void property="displayName"> 
+         <string>PercentTimeSpentInGCThreshold</string> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>HeapPercentUsage</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>$$${BASE_OBJECT_NAME}$$$,wt.subsystem=Monitors,wt.monitorType=Memory</string> 
+         </object> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>StartTime</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=Runtime</string> 
+         </object> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>Uptime</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=Runtime</string> 
+         </object> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>*</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=GarbageCollector,name=*</string> 
+         </object> 
+        </void> 
+        <void property="displayName"> 
+         <string>Detailed GC Data</string> 
+        </void> 
+       </object> 
+      </void> 
+     </void> 
+     <void property="infoItems"> 
+      <object idref="ArrayList3"/> 
+     </void> 
+     <void property="logAsLevel"> 
+      <string>WARN</string> 
+     </void> 
+     <void property="logger"> 
+      <string>wt.jmx.notif.gc</string> 
+     </void> 
+     <void property="loggerLevel"> 
+      <string>WARN</string> 
+     </void> 
+    </object> 
+   </void> 
+   <void method="add"> 
+    <object id="NotificationHandler1" class="wt.jmx.core.mbeans.NotificationHandler"> 
+     <object idref="NotificationHandlerManager0"/> 
+     <string>MemoryNotifier</string> 
+     <object class="javax.management.ObjectName"> 
+      <string>$$${BASE_OBJECT_NAME}$$$,wt.subsystem=Monitors,wt.monitorType=Memory</string> 
+     </object> 
+     <void property="customDelegateFactoryMap"> 
+      <object class="wt.jmx.core.mbeans.NamedChildSupport$SpecialMap"> 
+       <void method="put"> 
+        <string>PeriodicMemoryDumperDelegate</string> 
+        <object class="wt.jmx.core.mbeans.PeriodicMemoryDumperDelegate"> 
+         <string>PeriodicMemoryDumperDelegate</string> 
+         <void property="ownerMBean"> 
+          <object idref="NotificationHandler1"/> 
+         </void> 
+         <void property="startDumpingNotificationTypes"> 
+          <string>wt.jmx.core.mbeans.MemoryMonitorMBean.heapPercentUsageThreshold.exceeded.initial</string> 
+         </void> 
+         <void property="stopDumpingNotificationTypes"> 
+          <string>wt.jmx.core.mbeans.MemoryMonitorMBean.heapPercentUsageThreshold.exceeded.nolonger</string> 
+         </void> 
+        </object> 
+       </void> 
+      </object> 
+     </void> 
+     <void property="emailRecipientListName"> 
+      <string>JMX-Administrators</string> 
+     </void> 
+     <void property="emailSubject"> 
+      <string>Memory usage threshold exceeded</string> 
+     </void> 
+     <void id="ArrayList4" property="infoItems"> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>Name</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=Runtime</string> 
+         </object> 
+        </void> 
+        <void property="displayName"> 
+         <string>JVM Name</string> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>*</string> 
+        </void> 
+        <void property="displayName"> 
+         <string>Threshold Info</string> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>*</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=Memory</string> 
+         </object> 
+        </void> 
+        <void property="displayName"> 
+         <string>Memory Data</string> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>*</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=MemoryPool,name=*</string> 
+         </object> 
+        </void> 
+        <void property="displayName"> 
+         <string>Memory Pool Data</string> 
+        </void> 
+       </object> 
+      </void> 
+     </void> 
+     <void property="infoItems"> 
+      <object idref="ArrayList4"/> 
+     </void> 
+     <void property="logAsLevel"> 
+      <string>WARN</string> 
+     </void> 
+     <void property="logger"> 
+      <string>wt.jmx.notif.memory</string> 
+     </void> 
+     <void property="loggerLevel"> 
+      <string>WARN</string> 
+     </void> 
+    </object> 
+   </void> 
+   <void method="add"> 
+    <object id="NotificationHandler2" class="wt.jmx.core.mbeans.NotificationHandler"> 
+     <object idref="NotificationHandlerManager0"/> 
+     <string>ProcessCpuTimeNotifier</string> 
+     <object class="javax.management.ObjectName"> 
+      <string>$$${BASE_OBJECT_NAME}$$$,wt.subsystem=Monitors,wt.monitorType=ProcessCpuTime</string> 
+     </object> 
+     <void property="customDelegateFactoryMap"> 
+      <object class="wt.jmx.core.mbeans.NamedChildSupport$SpecialMap"> 
+       <void method="put"> 
+        <string>PeriodicStackLoggingDelegate</string> 
+        <object class="wt.jmx.core.mbeans.PeriodicStackLoggingDelegate"> 
+         <string>PeriodicStackLoggingDelegate</string> 
+         <void property="ownerMBean"> 
+          <object idref="NotificationHandler2"/> 
+         </void> 
+         <void property="startTracingNotificationTypes"> 
+          <string>wt.jmx.core.mbeans.ProcessCpuTimeMonitorMBean.processPercentCpuThreshold.exceeded.initial</string> 
+         </void> 
+         <void property="stopTracingNotificationTypes"> 
+          <string>wt.jmx.core.mbeans.ProcessCpuTimeMonitorMBean.processPercentCpuThreshold.exceeded.nolonger</string> 
+         </void> 
+        </object> 
+       </void> 
+      </object> 
+     </void> 
+     <void property="emailRecipientListName"> 
+      <string>JMX-Administrators</string> 
+     </void> 
+     <void property="emailSubject"> 
+      <string>Process percentage CPU time exceeded</string> 
+     </void> 
+     <void id="ArrayList5" property="infoItems"> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>Name</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=Runtime</string> 
+         </object> 
+        </void> 
+        <void property="displayName"> 
+         <string>JVM Name</string> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>ProcessPercentCpuThreshold</string> 
+        </void> 
+        <void property="displayName"> 
+         <string>ProcessPercentCpuThreshold</string> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>RecentCpuData</string> 
+        </void> 
+        <void property="displayName"> 
+         <string>RecentCpuData</string> 
+        </void> 
+       </object> 
+      </void> 
+     </void> 
+     <void property="infoItems"> 
+      <object idref="ArrayList5"/> 
+     </void> 
+     <void property="logAsLevel"> 
+      <string>WARN</string> 
+     </void> 
+     <void property="logger"> 
+      <string>wt.jmx.notif.cpuTime</string> 
+     </void> 
+     <void property="loggerLevel"> 
+      <string>WARN</string> 
+     </void> 
+    </object> 
+   </void> 
+  </void> 
+  <void property="notificationHandlers"> 
+   <object idref="ArrayList1"/> 
+  </void> 
+  <void property="ownerMBean"> 
+   <object idref="MBeanLoader0"/> 
+  </void> 
+ </object> 
+ <object class="wt.jmx.core.mbeans.MemoryMonitor"> 
+  <void property="heapPercentUsageThreshold"> 
+   <double>97.5</double> 
+  </void> 
+  <void property="oldGenPercentCollUsageThreshold"> 
+   <double>95.0</double> 
+  </void> 
+  <void property="oldGenPercentUsageThreshold"> 
+   <double>98.0</double> 
+  </void> 
+  <void property="ownerMBean"> 
+   <object idref="MBeanLoader0"/> 
+  </void> 
+  <void property="permGenPercentCollUsageThreshold"> 
+   <double>95.0</double> 
+  </void> 
+  <void property="permGenPercentUsageThreshold"> 
+   <double>97.5</double> 
+  </void> 
+ </object> 
+ <object class="wt.jmx.core.mbeans.GarbageCollectionMonitor"> 
+  <void property="ownerMBean"> 
+   <object idref="MBeanLoader0"/> 
+  </void> 
+ </object> 
+ <object class="wt.jmx.core.mbeans.ProcessCpuTimeMonitor"> 
+  <void property="ownerMBean"> 
+   <object idref="MBeanLoader0"/> 
+  </void> 
+  <void property="processPercentCpuThreshold"> 
+   <double>90.0</double> 
+  </void> 
+ </object> 
+ <object class="wt.jmx.core.mbeans.MonitorManager"> 
+  <void property="ownerMBean"> 
+   <object idref="MBeanLoader0"/> 
+  </void> 
+ </object> 
+ <object class="wt.jmx.core.mbeans.PropertiesMonitor"> 
+  <void property="ownerMBean"> 
+   <object idref="MBeanLoader0"/> 
+  </void> 
+ </object> 
+ <object id="SummaryManager0" class="wt.jmx.core.mbeans.SummaryManager"> 
+  <void property="ownerMBean"> 
+   <object idref="MBeanLoader0"/> 
+  </void> 
+  <void id="ArrayList6" property="summaries"> 
+   <void method="add"> 
+    <object class="wt.jmx.core.mbeans.Summary"> 
+     <object idref="SummaryManager0"/> 
+     <string>wt.jvm.info</string> 
+     <void property="firstDelaySeconds"> 
+      <int>0</int> 
+     </void> 
+     <void id="ArrayList7" property="infoItems"> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>Name</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=Runtime</string> 
+         </object> 
+        </void> 
+        <void property="displayName"> 
+         <string>JVMName</string> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>StartTime</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=Runtime</string> 
+         </object> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>HeapMemoryUsage.max</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=Memory</string> 
+         </object> 
+        </void> 
+        <void property="displayName"> 
+         <string>MaxHeapBytes</string> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>InputArguments</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=Runtime</string> 
+         </object> 
+        </void> 
+        <void property="displayName"> 
+         <string>JVMArguments</string> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>AvailableProcessors</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=OperatingSystem</string> 
+         </object> 
+        </void> 
+       </object> 
+      </void> 
+     </void> 
+     <void property="infoItems"> 
+      <object idref="ArrayList7"/> 
+     </void> 
+     <void property="intervalSeconds"> 
+      <int>2147483647</int> 
+     </void> 
+     <void property="multiLineFormat"> 
+      <boolean>true</boolean> 
+     </void> 
+     <void property="loggerLevel"> 
+      <string>INFO</string> 
+     </void> 
+    </object> 
+   </void> 
+   <void method="add"> 
+    <object class="wt.jmx.core.mbeans.Summary"> 
+     <object idref="SummaryManager0"/> 
+     <string>wt.summary.general</string> 
+     <void property="GCFirst"> 
+      <boolean>true</boolean> 
+     </void> 
+     <void property="firstDelaySeconds"> 
+      <int>0</int> 
+     </void> 
+     <void id="ArrayList8" property="infoItems"> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>Name</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=Runtime</string> 
+         </object> 
+        </void> 
+        <void property="displayName"> 
+         <string>JVMName</string> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>HeapMemoryUsage.used</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=Memory</string> 
+         </object> 
+        </void> 
+        <void property="displayName"> 
+         <string>HeapMemoryUsage</string> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>NonHeapMemoryUsage.used</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=Memory</string> 
+         </object> 
+        </void> 
+        <void property="displayName"> 
+         <string>NonHeapMemoryUsage</string> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>Uptime</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=Runtime</string> 
+         </object> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>ProcessCpuTime</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=OperatingSystem</string> 
+         </object> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>TotalCompilationTime</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=Compilation</string> 
+         </object> 
+        </void> 
+        <void property="displayName"> 
+         <string>JITCTime</string> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>Name</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=GarbageCollector,*</string> 
+         </object> 
+        </void> 
+        <void property="displayName"> 
+         <string>GarbageCollectors</string> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>CollectionTime</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=GarbageCollector,*</string> 
+         </object> 
+        </void> 
+        <void property="displayName"> 
+         <string>GCTime</string> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>CollectionCount</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=GarbageCollector,*</string> 
+         </object> 
+        </void> 
+        <void property="displayName"> 
+         <string>GCCount</string> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>LoadedClassCount</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=ClassLoading</string> 
+         </object> 
+        </void> 
+        <void property="displayName"> 
+         <string>Classes</string> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>ThreadCount</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=Threading</string> 
+         </object> 
+        </void> 
+        <void property="displayName"> 
+         <string>Threads</string> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>TotalStartedThreadCount</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>java.lang:type=Threading</string> 
+         </object> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>PermGenPercentCollUsage</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>$$${BASE_OBJECT_NAME}$$$,wt.subsystem=Monitors,wt.monitorType=Memory</string> 
+         </object> 
+        </void> 
+       </object> 
+      </void> 
+      <void method="add"> 
+       <object class="wt.jmx.core.mbeans.Info$Item"> 
+        <void property="MBeanAttributeName"> 
+         <string>PermGenPercentUsage</string> 
+        </void> 
+        <void property="MBeanObjectName"> 
+         <object class="javax.management.ObjectName"> 
+          <string>$$${BASE_OBJECT_NAME}$$$,wt.subsystem=Monitors,wt.monitorType=Memory</string> 
+         </object> 
+        </void> 
+       </object> 
+      </void> 
+     </void> 
+     <void property="infoItems"> 
+      <object idref="ArrayList8"/> 
+     </void> 
+     <void property="intervalSeconds"> 
+      <int>600</int> 
+     </void> 
+     <void property="loggerLevel"> 
+      <string>INFO</string> 
+     </void> 
+    </object> 
+   </void> 
+  </void> 
+  <void property="summaries"> 
+   <object idref="ArrayList6"/> 
+  </void> 
+ </object> 
+</java>

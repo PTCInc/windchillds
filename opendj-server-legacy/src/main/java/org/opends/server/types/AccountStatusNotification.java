@@ -23,6 +23,7 @@
  *
  *      Copyright 2006-2008 Sun Microsystems, Inc.
  *      Portions Copyright 2011-2015 ForgeRock AS.
+ *      Portions Copyright 2013 ptc Inc. (PTC) 
  */
 package org.opends.server.types;
 
@@ -258,7 +259,7 @@ public final class AccountStatusNotification
       String string = secondsToTimeString(timeToExpiration).toString();
       props.put(TIME_UNTIL_EXPIRATION, newArrayList(string));
 
-      long expTime = System.currentTimeMillis() + (1000 * timeToExpiration);
+      long expTime = System.currentTimeMillis() + (1000L * timeToExpiration);
       props.put(PASSWORD_EXPIRATION_TIME, newArrayList(new Date(expTime).toString()));
     }
 

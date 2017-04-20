@@ -37,16 +37,16 @@ cn: config
 ds-cfg-check-schema: true
 ds-cfg-add-missing-rdn-attributes: true
 ds-cfg-allow-attribute-name-exceptions: false
-ds-cfg-invalid-attribute-syntax-behavior: reject
+ds-cfg-invalid-attribute-syntax-behavior: warn
 ds-cfg-single-structural-objectclass-behavior: reject
 ds-cfg-notify-abandoned-operations: false
 ds-cfg-proxied-authorization-identity-mapper: cn=Exact Match,cn=Identity Mappers,cn=config
-ds-cfg-size-limit: 1000
+ds-cfg-size-limit: 20000
 ds-cfg-time-limit: 60 seconds
 ds-cfg-lookthrough-limit: 5000
 ds-cfg-writability-mode: enabled
 ds-cfg-bind-with-dn-requires-password: true
-ds-cfg-reject-unauthenticated-requests: false
+ds-cfg-reject-unauthenticated-requests: true
 ds-cfg-default-password-policy: cn=Default Password Policy,cn=Password Policies,cn=config
 ds-cfg-return-bind-error-messages: false
 ds-cfg-idle-time-limit: 0 seconds
@@ -412,7 +412,7 @@ objectClass: ds-cfg-connection-handler
 objectClass: ds-cfg-jmx-connection-handler
 cn: JMX Connection Handler
 ds-cfg-java-class: org.opends.server.protocols.jmx.JmxConnectionHandler
-ds-cfg-enabled: false
+ds-cfg-enabled: true
 ds-cfg-use-ssl: false
 ds-cfg-listen-port: 1689
 ds-cfg-ssl-cert-nickname: server-cert
@@ -1389,16 +1389,16 @@ ds-cfg-password-attribute: userPassword
 ds-cfg-default-password-storage-scheme: cn=Salted SHA-1,cn=Password Storage Schemes,cn=config
 ds-cfg-allow-expired-password-changes: false
 ds-cfg-allow-multiple-password-values: false
-ds-cfg-allow-pre-encoded-passwords: false
+ds-cfg-allow-pre-encoded-passwords: true
 ds-cfg-allow-user-password-changes: true
 ds-cfg-expire-passwords-without-warning: false
 ds-cfg-force-change-on-add: false
 ds-cfg-force-change-on-reset: false
 ds-cfg-grace-login-count: 0
 ds-cfg-idle-lockout-interval: 0 seconds
-ds-cfg-lockout-failure-count: 0
-ds-cfg-lockout-duration: 0 seconds
-ds-cfg-lockout-failure-expiration-interval: 0 seconds
+ds-cfg-lockout-failure-count: 5
+ds-cfg-lockout-duration: 900 seconds
+ds-cfg-lockout-failure-expiration-interval: 3600 seconds
 ds-cfg-min-password-age: 0 seconds
 ds-cfg-max-password-age: 0 seconds
 ds-cfg-max-password-reset-age: 0 seconds
@@ -1429,9 +1429,9 @@ ds-cfg-force-change-on-add: false
 ds-cfg-force-change-on-reset: false
 ds-cfg-grace-login-count: 0
 ds-cfg-idle-lockout-interval: 0 seconds
-ds-cfg-lockout-failure-count: 0
-ds-cfg-lockout-duration: 0 seconds
-ds-cfg-lockout-failure-expiration-interval: 0 seconds
+ds-cfg-lockout-failure-count: 5
+ds-cfg-lockout-duration: 900 seconds
+ds-cfg-lockout-failure-expiration-interval: 3600 seconds
 ds-cfg-min-password-age: 0 seconds
 ds-cfg-max-password-age: 0 seconds
 ds-cfg-max-password-reset-age: 0 seconds
@@ -1807,6 +1807,9 @@ ds-cfg-default-root-privilege-name: ldif-import
 ds-cfg-default-root-privilege-name: ldif-export
 ds-cfg-default-root-privilege-name: backend-backup
 ds-cfg-default-root-privilege-name: backend-restore
+ds-cfg-default-root-privilege-name: jmx-notify
+ds-cfg-default-root-privilege-name: jmx-read
+ds-cfg-default-root-privilege-name: jmx-write
 ds-cfg-default-root-privilege-name: server-lockdown
 ds-cfg-default-root-privilege-name: server-shutdown
 ds-cfg-default-root-privilege-name: server-restart
@@ -2490,3 +2493,28 @@ ds-cfg-java-class: org.opends.server.extensions.FileBasedTrustManagerProvider
 ds-cfg-enabled: true
 ds-cfg-trust-store-type: JKS
 ds-cfg-trust-store-file: config/admin-truststore
+
+dn: ds-cfg-attribute=ptcRuntimeServiceName,cn=Index,ds-cfg-backend-id=userRoot,cn=Backends,cn=config
+objectClass: top
+objectClass: ds-cfg-backend-index
+ds-cfg-index-type: equality
+ds-cfg-attribute: ptcruntimeservicename
+
+dn: ds-cfg-attribute=ptcServiceName,cn=Index,ds-cfg-backend-id=userRoot,cn=Backends,cn=config
+objectClass: top
+objectClass: ds-cfg-backend-index
+ds-cfg-index-type: equality
+ds-cfg-attribute: ptcservicename
+
+dn: ds-cfg-attribute=ptcSupportingAdapter,cn=Index,ds-cfg-backend-id=userRoot,cn=Backends,cn=config
+objectClass: top
+objectClass: ds-cfg-backend-index
+ds-cfg-index-type: equality
+ds-cfg-attribute: ptcsupportingadapter
+
+dn: ds-cfg-attribute=ptcUniqueOrganizationIdentifier,cn=Index,ds-cfg-backend-id=userRoot,cn=Backends,cn=config
+objectClass: top
+objectClass: ds-cfg-backend-index
+ds-cfg-index-type: equality
+ds-cfg-index-type: substring
+ds-cfg-attribute: ptcuniqueorganizationidentifier

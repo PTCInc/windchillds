@@ -23,6 +23,7 @@
  *
  *      Copyright 2006-2009 Sun Microsystems, Inc.
  *      Portions Copyright 2014-2015 ForgeRock AS
+ *      Portions copyright 2013 PTC Inc. (PTC)
  */
 package org.opends.server.backends.task;
 
@@ -821,7 +822,7 @@ public abstract class Task implements Comparable<Task>
     {
       StringBuilder buffer = new StringBuilder();
       buffer.append("[");
-      buffer.append(TimeThread.getLocalTime());
+      buffer.append(TimeThread.getLocalTimeMillis());
       buffer.append("] severity=\"");
       buffer.append(severity.name());
       buffer.append("\" msgCount=");

@@ -23,6 +23,7 @@
  *
  *      Copyright 2006-2008 Sun Microsystems, Inc.
  *      Portions Copyright 2013-2015 ForgeRock AS
+ *      Portions Copyright 2013 PTC Inc. (PTC)
  */
 package org.opends.server.loggers;
 
@@ -89,7 +90,7 @@ public class ThreadFilterTextErrorLogPublisher
       {
         StringBuilder sb = new StringBuilder();
         sb.append("[");
-        sb.append(TimeThread.getLocalTime());
+        sb.append(TimeThread.getLocalTimeMillis());
         sb.append("] category=").append(category).
         append(" severity=").append(severity).
         append(" msgID=").append(message.resourceName()).

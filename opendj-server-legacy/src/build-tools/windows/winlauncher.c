@@ -22,6 +22,7 @@
 *
 *
 *      Copyright 2008 Sun Microsystems, Inc.
+*      Portions Copyright 2013 PTC Inc. (PTC)
 */
 
 #include "winlauncher.h"
@@ -163,11 +164,14 @@ int getPid(const char* instanceDir)
 // Kills the process associated with the provided pid.
 // Returns TRUE if the process could be killed or the
 // process did not exist and false otherwise.
+// It returns -2 if the user did not have sufficient access
+// and returns -1 for all other cases.
 // ----------------------------------------------------
 BOOL killProcess(int pid)
 {
-  BOOL processDead;
+  int rtn = -1;
   HANDLE procHandle;
+  DWORD lastError;
 
   debug("killProcess(pid=%d)", pid);
 
@@ -181,17 +185,23 @@ BOOL killProcess(int pid)
 
   if (procHandle == NULL)
   {
-    debug("The process with pid=%d has already terminated.", pid);
-    // process already dead
-    processDead = TRUE;
+    lastError = GetLastError();
+    debugError("Could not open process with pid=%d.  Last error = %d.", pid, GetLastError());
+
+    if (lastError == ERROR_ACCESS_DENIED) {
+		debug ("Insufficient privileges -- The process with pid=%d could not be terminated.", pid);
+		rtn = -2;
+    } else {
+        debug("The process with pid=%d has already terminated...", pid);
+        // process already dead
+        rtn = 0;                        // Process already terminated.
+    }
   }
   else
   {
     if (!TerminateProcess(procHandle, 0))
     {
       debugError("Failed to terminate process (pid=%d) lastError=%d.", pid, GetLastError());
-      // failed to terminate the process
-      processDead = FALSE;
     }
     else
     {
@@ -201,8 +211,7 @@ BOOL killProcess(int pid)
       debug("Successfully began termination process for (pid=%d).", pid);
       // wait for the process to end.
 
-      processDead = FALSE;
-      while ((nTries > 0) && !processDead)
+      while ((nTries > 0) && rtn != 0)
       {
         GetExitCodeProcess(procHandle, &exitCode);
         if (exitCode == STILL_ACTIVE)
@@ -215,15 +224,15 @@ BOOL killProcess(int pid)
         else
         {
           debug("Process (pid=%d) has exited with exit code %d.", pid, exitCode);
-          processDead = TRUE;
+          rtn = 0;                  // Successfully terminated process.
         }
       }
     }
     CloseHandle(procHandle);
   }
 
-  debug("killProcess(pid=%d) returning %d", pid, processDead);
-  return processDead;
+  debug("killProcess(pid=%d) returning %d", pid, rtn);
+  return rtn;
 } // killProcess
 
 // ----------------------------------------------------
@@ -443,7 +452,8 @@ int start(const char* instanceDir, char* argv[])
 //
 // Returns 0 if the instance could be stopped using the
 // pid stored in a file of the server installation and
-// -1 otherwise.
+// -1 if there was an error.  It returns -2 if the caller
+// had insufficient access.
 // ----------------------------------------------------
 int stop(const char* instanceDir)
 {
@@ -457,7 +467,7 @@ int stop(const char* instanceDir)
 
   if (childPid != 0)
   {
-    if (killProcess(childPid))
+    if ((returnCode = killProcess(childPid)) == 0)
     {
       returnCode = 0;
       deletePidFile(instanceDir);

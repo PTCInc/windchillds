@@ -23,6 +23,7 @@
  *
  *      Copyright 2006-2010 Sun Microsystems, Inc.
  *      Portions Copyright 2011-2015 ForgeRock AS
+ *      Portions Copyright 2013 ptc Inc. (PTC)
  */
 
 package org.opends.quicksetup.installer;
@@ -1003,13 +1004,18 @@ public class InstallerHelper {
       supportsMemory = Utils.supportsOption(m, javaHome, installPath);
     }
 
-    JavaArguments additionalArgs = new JavaArguments();
-    additionalArgs.setAdditionalArguments(origJavaArguments.getAdditionalArguments());
-    String a = additionalArgs.getStringArguments();
-    boolean supportsAdditional = false;
-    if (a.length() > 0)
+    ArrayList<String> addArgsFinal = new ArrayList<String>();
+    String [] origAddArgs = origJavaArguments.getAdditionalArguments();
+    for (int i = 0; i < origAddArgs.length; i++)
     {
-      supportsAdditional = Utils.supportsOption(a, javaHome, installPath);
+      String a = origAddArgs[i];
+      if (a.length() > 0 )
+      {
+        if ( Utils.supportsOption(a, javaHome, installPath) == true)
+        {
+            addArgsFinal.add (a);
+        }
+      }
     }
 
     JavaArguments javaArgs = new JavaArguments();
@@ -1039,9 +1045,10 @@ public class InstallerHelper {
         }
       }
     }
-    if (supportsAdditional)
+    if (addArgsFinal.size() > 0)
     {
-      javaArgs.setAdditionalArguments(origJavaArguments.getAdditionalArguments());
+      javaArgs.setAdditionalArguments(
+          addArgsFinal.toArray(new String [addArgsFinal.size()]));
     }
     return javaArgs;
   }

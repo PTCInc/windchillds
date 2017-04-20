@@ -24,6 +24,7 @@ rem
 rem
 rem      Copyright 2006-2010 Sun Microsystems, Inc.
 rem      Portions Copyright 2011-2014 ForgeRock AS
+rem      Portions Copyright 2013 PTC Inc. (PTC)
 
 setlocal
 
@@ -105,12 +106,18 @@ goto writeLastLine
 :stopUsingSystemCall
 echo %SCRIPT%: stop using system call >> %LOG%
 "%INSTALL_ROOT%\lib\winlauncher.exe" stop "%INSTANCE_ROOT%"
+if not %errorlevel% == -2 goto end
+rem Insufficient privileges -- Try again and request admin privileges.
+"%INSTALL_ROOT%\lib\launcher_administrator.exe" stop "%INSTANCE_ROOT%"
 goto end
 
 :restartUsingSystemCall
 echo %SCRIPT%: restart using system call >> %LOG%
 "%INSTALL_ROOT%\lib\winlauncher.exe" stop "%INSTANCE_ROOT%"
-if not %errorlevel% == 0 goto end
+if %errorlevel% == -1 goto end
+if %errorlevel% == 0 goto startUsingSystemCall
+rem Insufficient privileges -- Try again and request admin privileges.
+"%INSTALL_ROOT%\lib\launcher_administrator.exe" stop "%INSTANCE_ROOT%"
 goto startUsingSystemCall
 
 :stopUsingProtocol
