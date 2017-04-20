@@ -150,9 +150,23 @@ public class  MBeanStartup
     // the lock and null check are just being super defensive, i.e. there is really no need...
     synchronized ( lock )
     {
+    	
       if ( mbeanLoader == null )
         // TO_DO: change first 2 args to be controlled by properties file ...
-        mbeanLoader = MBeanLoader.createAndRegisterMBeanLoader( "WDSMBeanConfig.xml", 180, null, true );
+    	  System.out.println("Checking "+System.getProperty( WDS_INSTALL_ROOT)+File.separator+"config"+File.separator+"WDSMBeanConfig.xml");
+    	  String configFile = "WDSMBeanConfig.xml";
+    	  
+    	  try{
+	    	  File file = new File(System.getProperty( WDS_INSTALL_ROOT)+File.separator+"config"+File.separator+"WDSMBeanConfig.xml");
+			  if(file.exists()) {
+				  configFile = System.getProperty( WDS_INSTALL_ROOT)+"/config/WDSMBeanConfig.xml";
+				  System.out.println("File fouund "+configFile);
+			  }
+    	  }catch(Exception e) {
+    		  e.printStackTrace();
+    	  }
+    	  
+        mbeanLoader = MBeanLoader.createAndRegisterMBeanLoader( configFile, 180, null, true );
     }
   }
 }

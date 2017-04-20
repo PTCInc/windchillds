@@ -23,6 +23,7 @@
 *
 *      Copyright 2008-2010 Sun Microsystems, Inc.
 *      Portions Copyright 2011-2013 ForgeRock AS
+*      Portions Copyright 2013 PTC Inc. (PTC)
 */
 
 #include "service.h"
@@ -512,7 +513,7 @@ ServiceReturnCode isServerRunning(BOOL *running, BOOL mustDebug)
 // The functions returns SERVICE_RETURN_OK if we could start the server
 // and SERVICE_RETURN_ERROR otherwise.
 // ----------------------------------------------------
-ServiceReturnCode doStartApplication()
+ServiceReturnCode doStartApplication( DWORD *_checkPoint)
 {
   ServiceReturnCode returnValue;
   // init out params
@@ -521,6 +522,8 @@ ServiceReturnCode doStartApplication()
   PROCESS_INFORMATION procInfo; // info on the new process
   BOOL createOk;
   BOOL waitOk;
+  DWORD startDSExit = 0;
+  ServiceReturnCode code;
 
   debug("doStartApplication");
 
@@ -538,8 +541,9 @@ ServiceReturnCode doStartApplication()
       // startup is deleted (file logs\server.starting).
       const DWORD STARTDS_WAIT_DEFAULT_VALUE = 300000;
       DWORD wait = STARTDS_WAIT_DEFAULT_VALUE;
+      DWORD thisWait;
+      DWORD shortWait = 5000;
       char * nWaitForStartDS = getenv("OPENDJ_WINDOWS_SERVICE_STARTDS_WAIT");
-      DWORD startDSExit;
       if (nWaitForStartDS != NULL)
       {
         debug("doStartApplication: OPENDJ_WINDOWS_SERVICE_STARTDS_WAIT env var set to %s",
@@ -555,16 +559,38 @@ ServiceReturnCode doStartApplication()
         debug("doStartApplication: OPENDJ_WINDOWS_SERVICE_STARTDS_WAIT is not set. Using default %d milliseconds.",
             STARTDS_WAIT_DEFAULT_VALUE);
       }
-      waitOk = waitForProcess(&procInfo, wait, &startDSExit);
-      if (waitOk)
+
+      code = SERVICE_RETURN_OK;
+      do
       {
-        debug("doStartApplication: waited properly for process end.");
-        debug("doStartApplication: exit code of script: %d", startDSExit);
-        if (startDSExit != 0)
+        // Only wait a short time for the startup (5 seconds), or the remaining wait time if that's less.
+        thisWait = wait < shortWait ? wait : shortWait;
+        waitOk = waitForProcess(&procInfo, thisWait, &startDSExit);
+        if (waitOk)
         {
-          createOk = FALSE;
+            debug("doStartApplication: waited properly for process end.");
+            debug("doStartApplication: exit code of script: %d", startDSExit);
         }
-      }
+        else
+        {
+            // The startup is still in process, but we need to post a message to the
+            // SCM to refresh the timelimit allowed on startup.
+            wait -= thisWait;
+            debug("doStartApplication: after short wait: %d, exit code: %d, remaining wait: %d",
+                   thisWait, startDSExit, wait);
+
+            code = updateServiceStatus (SERVICE_START_PENDING,
+                                        NO_ERROR,
+                                        0,
+                                        (*_checkPoint)++,
+                                        TIMEOUT_START_SERVICE,
+                                        _serviceStatusHandle);
+            if (code != SERVICE_RETURN_OK) {
+                debug ("doStartApplication: Error updating the service status: %d.", code);
+            }
+        }
+
+      } while (!waitOk && startDSExit == WAIT_TIMEOUT && wait > 0 && code == SERVICE_RETURN_OK);
     }
     else
     {
@@ -581,12 +607,26 @@ ServiceReturnCode doStartApplication()
     if (running)
       {
         returnValue = SERVICE_RETURN_OK;
-        debug("doStartApplication: server running.");
+        if (startDSExit == 0)
+        {
+        	debug("doStartApplication: server running.");
+        }
+        else
+        {
+            debug("doStartApplication: server running, though start-ds exited with code: %d.", startDSExit);
+        }
       }
       else
       {
         returnValue = SERVICE_RETURN_ERROR;
-        debug("doStartApplication: server not running.");
+        if (startDSExit == 0)
+        {
+            debug("doStartApplication: server not running, though start-ds exited successfully.");
+        }
+        else
+        {
+            debug("doStartApplication: server not running; start-ds exited with code: %d.", startDSExit);
+        }
       }
   }
     else if (createOk)

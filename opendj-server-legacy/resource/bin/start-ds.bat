@@ -24,6 +24,7 @@ rem
 rem
 rem      Copyright 2006-2010 Sun Microsystems, Inc.
 rem      Portions Copyright 2011-2014 ForgeRock AS
+rem      Portions Copyright 2013 PTC Inc. (PTC)
 
 setlocal
 for %%i in (%~sf0) do set DIR_HOME=%%~dPsi..
@@ -86,7 +87,7 @@ goto exitErrorCode
 
 :runNoDetach
 echo %SCRIPT%: Run no detach >> %LOG%
-echo. > "%INSTANCE_ROOT%\logs\server.out"
+echo. >> "%INSTANCE_ROOT%\logs\server.out"
 echo. > "%INSTANCE_ROOT%\logs\server.starting"
 if exist "%INSTANCE_ROOT%\lib\set-java-args.bat %SCRIPT%" DO call "%INSTANCE_ROOT%\lib\set-java-args.bat"
 "%OPENDJ_JAVA_BIN%" %OPENDJ_JAVA_ARGS% %SCRIPT_NAME_ARG% org.opends.server.core.DirectoryServer --configClass org.opends.server.extensions.ConfigFileHandler --configFile "%INSTANCE_ROOT%\config\config.ldif" %*
@@ -95,7 +96,7 @@ goto exitErrorCode
 
 :runNoDetachQuiet
 echo %SCRIPT%: Run no detach quiet >> %LOG%
-echo. > "%INSTANCE_ROOT%\logs\server.out"
+echo. >> "%INSTANCE_ROOT%\logs\server.out"
 echo. > "%INSTANCE_ROOT%\logs\server.starting"
 if exist "%INSTANCE_ROOT%\lib\set-java-args.bat %SCRIPT%" DO call "%INSTANCE_ROOT%\lib\set-java-args.bat"
 "%OPENDJ_JAVA_BIN%" %OPENDJ_JAVA_ARGS% %SCRIPT_NAME_ARG% org.opends.server.core.DirectoryServer --configClass org.opends.server.extensions.ConfigFileHandler --configFile "%INSTANCE_ROOT%\config\config.ldif" %* >> %LOG%
@@ -104,7 +105,7 @@ goto exitErrorCode
 
 :runDetach
 echo %SCRIPT%: Run detach >> %LOG%
-echo. > "%INSTANCE_ROOT%\logs\server.out"
+echo. >> "%INSTANCE_ROOT%\logs\server.out"
 echo. > "%INSTANCE_ROOT%\logs\server.starting"
 if exist "%INSTANCE_ROOT%\lib\set-java-args.bat" DO call "%INSTANCE_ROOT%\lib\set-java-args.bat"
 "%INSTALL_ROOT%\lib\winlauncher.exe" start "%INSTANCE_ROOT%" "%OPENDJ_JAVA_BIN%" %OPENDJ_JAVA_ARGS%  %SCRIPT_NAME_ARG% org.opends.server.core.DirectoryServer --configClass org.opends.server.extensions.ConfigFileHandler --configFile "%INSTANCE_ROOT%\config\config.ldif" %*
@@ -114,25 +115,25 @@ goto checkStarted
 
 :runDetachQuiet
 echo %SCRIPT%: Run detach quiet >> %LOG%
-echo. > "%INSTANCE_ROOT%\logs\server.out"
+echo. >> "%INSTANCE_ROOT%\logs\server.out"
 echo. > "%INSTANCE_ROOT%\logs\server.starting"
 if exist "%INSTANCE_ROOT%\lib\set-java-args.bat" DO call "%INSTANCE_ROOT%\lib\set-java-args.bat"
 "%INSTALL_ROOT%\lib\winlauncher.exe" start "%INSTANCE_ROOT%" "%OPENDJ_JAVA_BIN%" %OPENDJ_JAVA_ARGS%  %SCRIPT_NAME_ARG% org.opends.server.core.DirectoryServer --configClass org.opends.server.extensions.ConfigFileHandler --configFile "%INSTANCE_ROOT%\config\config.ldif" %*
 echo %SCRIPT%: Waiting for "%INSTANCE_ROOT%\logs\server.starting" to be deleted >> %LOG%
-"%OPENDJ_JAVA_BIN%" -client org.opends.server.tools.WaitForFileDelete --targetFile "%INSTANCE_ROOT%\logs\server.starting" --logFile "%INSTANCE_ROOT%\logs\server.out" %* >> %LOG%
+"%OPENDJ_JAVA_BIN%" -client org.opends.server.tools.WaitForFileDelete --targetFile "%INSTANCE_ROOT%\logs\server.starting" --logFile "%INSTANCE_ROOT%\logs\server.out" >> %LOG%
 goto checkStarted
 
 :runDetachCalledByWinService
 rem We write the output of the start command to the winservice.out file.
 echo %SCRIPT%: Run detach called by windows service >> %LOG%
-echo. > "%INSTANCE_ROOT%\logs\server.out"
+echo. >> "%INSTANCE_ROOT%\logs\server.out"
 echo. > "%INSTANCE_ROOT%\logs\server.starting"
 echo. > "%INSTANCE_ROOT%\logs\server.startingservice"
 echo. > "%INSTANCE_ROOT%\logs\winservice.out"
 if exist "%INSTANCE_ROOT%\lib\set-java-args.bat" DO call "%INSTANCE_ROOT%\lib\set-java-args.bat"
 "%INSTALL_ROOT%\lib\winlauncher.exe" start "%INSTANCE_ROOT%" "%OPENDJ_JAVA_BIN%" -Xrs %OPENDJ_JAVA_ARGS% %SCRIPT_NAME_ARG% org.opends.server.core.DirectoryServer --configClass org.opends.server.extensions.ConfigFileHandler --configFile "%INSTANCE_ROOT%\config\config.ldif" %*
 echo %SCRIPT%: Waiting for "%INSTANCE_ROOT%\logs\server.starting" to be deleted >> %LOG%
-"%OPENDJ_JAVA_BIN%" -client org.opends.server.tools.WaitForFileDelete --targetFile "%INSTANCE_ROOT%\logs\server.starting" --logFile "%INSTANCE_ROOT%\logs\server.out" --outputFile "%INSTANCE_ROOT%\logs\winservice.out" %*
+"%OPENDJ_JAVA_BIN%" -client org.opends.server.tools.WaitForFileDelete --targetFile "%INSTANCE_ROOT%\logs\server.starting" --logFile "%INSTANCE_ROOT%\logs\server.out" --outputFile "%INSTANCE_ROOT%\logs\winservice.out"
 erase "%INSTANCE_ROOT%\logs\server.startingservice"
 goto checkStarted
 
@@ -140,7 +141,7 @@ goto checkStarted
 echo %SCRIPT%: Run as service >> %LOG%
 "%OPENDJ_JAVA_BIN%" -client org.opends.server.tools.StartWindowsService
 echo %SCRIPT%: Waiting for "%INSTANCE_ROOT%\logs\server.startingservice" to be deleted >> %LOG%
-"%OPENDJ_JAVA_BIN%" -client org.opends.server.tools.WaitForFileDelete --targetFile "%INSTANCE_ROOT%\logs\server.startingservice" %*
+"%OPENDJ_JAVA_BIN%" -client org.opends.server.tools.WaitForFileDelete --targetFile "%INSTANCE_ROOT%\logs\server.startingservice"
 rem Type the contents the winwervice.out file and delete it.
 if exist "%INSTANCE_ROOT%\logs\winservice.out" type "%INSTANCE_ROOT%\logs\winservice.out"
 if exist "%INSTANCE_ROOT%\logs\winservice.out" erase "%INSTANCE_ROOT%\logs\winservice.out"
@@ -159,7 +160,7 @@ set ERROR_CODE=0
 goto exitErrorCode
 
 :serverNotStarted
-echo %SCRIPT%: finished >> %LOG%
+echo %SCRIPT%: finished, server not started -- error level: %errorlevel%, Error code 1 >> %LOG%
 set ERROR_CODE=1
 goto exitErrorCode
 

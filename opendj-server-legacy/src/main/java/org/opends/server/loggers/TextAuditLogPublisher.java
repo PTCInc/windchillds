@@ -23,6 +23,7 @@
  *
  *      Copyright 2006-2008 Sun Microsystems, Inc.
  *      Portions Copyright 2011-2015 ForgeRock AS.
+ *      Portions copyright 2013 PTC Inc. (PTC)
  */
 package org.opends.server.loggers;
 
@@ -448,7 +449,7 @@ public final class TextAuditLogPublisher extends
   private void appendHeader(Operation operation, StringBuilder buffer)
   {
     buffer.append("# ");
-    buffer.append(TimeThread.getLocalTime());
+    buffer.append(TimeThread.getLocalTimeMillis());
     buffer.append("; conn=");
     buffer.append(operation.getConnectionID());
     buffer.append("; op=");

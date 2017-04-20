@@ -23,6 +23,7 @@
  *
  *      Copyright 2006-2010 Sun Microsystems, Inc.
  *      Portions Copyright 2012-2015 ForgeRock AS.
+ *      Portions Copyright 2013 PTC Inc. (PTC)
  */
 package org.opends.server.tools;
 
@@ -131,7 +132,7 @@ public class LDAPSearch
                            ArrayList<LDAPFilter> filters,
                            LinkedHashSet<String> attributes,
                            LDAPSearchOptions searchOptions,
-                           int wrapColumn )
+                           int wrapColumn, boolean noBase64Encoding )
          throws IOException, LDAPException
   {
     int matchingEntries = 0;
@@ -277,7 +278,7 @@ public class LDAPSearch
                 SearchResultEntryProtocolOp searchEntryOp =
                      responseMessage.getSearchResultEntryProtocolOp();
                 StringBuilder sb = new StringBuilder();
-                toLDIF(searchEntryOp, sb, wrapColumn, typesOnly);
+                toLDIF(searchEntryOp, sb, wrapColumn, typesOnly, noBase64Encoding);
                 out.print(sb.toString());
                 matchingEntries++;
                 break;
@@ -416,12 +417,12 @@ public class LDAPSearch
    *                     without values.
    */
   public void toLDIF(SearchResultEntryProtocolOp entry, StringBuilder buffer,
-                     int wrapColumn, boolean typesOnly)
+                     int wrapColumn, boolean typesOnly, boolean noBase64Encoding)
   {
     // Add the DN to the buffer.
     String dnString = entry.getDN().toString();
     int    colsRemaining;
-    if (needsBase64Encoding(dnString))
+    if (!noBase64Encoding && needsBase64Encoding(dnString))
     {
       dnString = Base64.encode(getBytes(dnString));
       buffer.append("dn:: ");
@@ -482,7 +483,7 @@ public class LDAPSearch
         for (ByteString v : a.getValues())
         {
           String valueString;
-          if (needsBase64Encoding(v))
+          if (!noBase64Encoding && needsBase64Encoding(v))
           {
             valueString = Base64.encode(v);
             buffer.append(name);
@@ -680,7 +681,7 @@ public class LDAPSearch
     StringArgument    propertiesFileArgument   = null;
     BooleanArgument   noPropertiesFileArgument = null;
     BooleanArgument   subEntriesArgument       = null;
-
+    BooleanArgument   base64EncodingOff        = null;
 
     // Create the command-line argument parser for use with this program.
     LocalizableMessage toolDescription = INFO_LDAPSEARCH_TOOL_DESCRIPTION.get();
@@ -1063,6 +1064,12 @@ public class LDAPSearch
       showUsage = CommonArguments.getShowUsage();
       argParser.addArgument(showUsage);
       argParser.setUsageArgument(showUsage, out);
+      
+      base64EncodingOff = new BooleanArgument("base64EncodingOff", 'B', "base64EncodingOff",
+                                              INFO_DESCRIPTION_BASE64OFF.get());
+      base64EncodingOff.setPropertyName("base64EncodingOff");
+      base64EncodingOff.setHidden(true);
+      argParser.addArgument(base64EncodingOff);
     } catch (ArgumentException ae)
     {
       printWrappedText(err, ERR_CANNOT_INITIALIZE_ARGS.get(ae.getMessage()));
@@ -1657,7 +1664,8 @@ public class LDAPSearch
           matchingEntries += ldapSearch.executeSearch(connection, baseDNValue,
                                                       filters, attributes,
                                                       searchOptions,
-                                                      wrapColumn);
+                                                      wrapColumn, 
+                                                      base64EncodingOff.isPresent());
 
           List<Control> responseControls =
                ldapSearch.getResponseControls();
@@ -1700,7 +1708,8 @@ public class LDAPSearch
         ldapSearch = new LDAPSearch(nextMessageID, out, err);
         matchingEntries = ldapSearch.executeSearch(connection, baseDNValue,
                                                    filters, attributes,
-                                                   searchOptions, wrapColumn);
+                                                   searchOptions, wrapColumn,
+                                                   base64EncodingOff.isPresent());
       }
 
       if (countEntries.isPresent() && returnMatchingEntries)

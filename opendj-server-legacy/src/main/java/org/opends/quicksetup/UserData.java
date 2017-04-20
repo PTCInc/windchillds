@@ -23,6 +23,7 @@
  *
  *      Copyright 2008-2010 Sun Microsystems, Inc.
  *      Portions Copyright 2011-2015 ForgeRock AS.
+ *      Portions copyright 2013 PTC Inc. (PTC)
  */
 package org.opends.quicksetup;
 
@@ -105,7 +106,7 @@ public class UserData
     forceOnError = true;
     verbose = false;
 
-    LinkedList<String> baseDn = CollectionUtils.newLinkedList("dc=example,dc=com");
+    LinkedList<String> baseDn = CollectionUtils.newLinkedList("o=ptc");
     NewSuffixOptions defaultNewSuffixOptions = NewSuffixOptions.createEmpty(baseDn);
     setNewSuffixOptions(defaultNewSuffixOptions);
 

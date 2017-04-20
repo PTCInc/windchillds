@@ -67,6 +67,7 @@
 
     <!-- Product information properties -->
     <lowerCaseProductName>opendj</lowerCaseProductName>
+	<subfolderName>${product.name}-${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}-${parsedVersion.qualifier}</subfolderName>
     <patchFixIds />
     <isDebugBuild>false</isDebugBuild>
     <docHomepageUrl>http://opendj.forgerock.org/</docHomepageUrl>
@@ -1181,14 +1182,14 @@
             </goals>
             <configuration>
               <target>
-                <zip destfile="${project.build.directory}/package/${product.name}-${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.zip">
-                  <zipfileset dir="${project.build.directory}/package/${lowerCaseProductName}" includes="**/*" excludes="bin/*,template/**/*,lib/_client-script.sh,lib/_script-util.sh,lib/_server-script.sh,lib/_mixed-script.sh,setup,uninstall,upgrade,QuickSetup.app/Contents/MacOS/universalJavaApplicationStub,Uninstall.app/Contents/MacOS/universalJavaApplicationStub,bin/ControlPanel.app/Contents/MacOS/universalJavaApplicationStub" filemode="644" dirmode="755" prefix="opendj" />
-                  <zipfileset dir="${project.build.directory}/package/${lowerCaseProductName}" includes="lib/_client-script.sh,lib/_script-util.sh,lib/_server-script.sh,lib/_mixed-script.sh" filemode="755" dirmode="755" prefix="opendj" />
-                  <zipfileset dir="${project.build.directory}/package/${lowerCaseProductName}" includes="bin/*" filemode="755" dirmode="755" prefix="opendj" />
-                  <zipfileset dir="${project.build.directory}/package/${lowerCaseProductName}" includes="setup,uninstall,upgrade,QuickSetup.app/Contents/MacOS/universalJavaApplicationStub,Uninstall.app/Contents/MacOS/universalJavaApplicationStub,bin/ControlPanel.app/Contents/MacOS/universalJavaApplicationStub" filemode="755" dirmode="755" prefix="opendj" />
-                  <zipfileset dir="${project.build.directory}/package/${lowerCaseProductName}" includes="template/**/*" filemode="444" dirmode="744" prefix="opendj" />
-                </zip>
-                <attachartifact file="${project.build.directory}/package/${product.name}-${parsedVersion.majorVersion}.${parsedVersion.minorVersion}.${parsedVersion.incrementalVersion}.zip" type="zip" />
+								<zip destfile="${project.build.directory}/package/${product.name}.zip">
+									<zipfileset dir="${project.build.directory}/package/${lowerCaseProductName}" includes="**/*" excludes="bin/*,template/**/*,lib/_client-script.sh,lib/_script-util.sh,lib/_server-script.sh,lib/_mixed-script.sh,setup,uninstall,upgrade,QuickSetup.app/Contents/MacOS/universalJavaApplicationStub,Uninstall.app/Contents/MacOS/universalJavaApplicationStub,bin/ControlPanel.app/Contents/MacOS/universalJavaApplicationStub" filemode="644" dirmode="755" prefix="${subfolderName}" />
+									<zipfileset dir="${project.build.directory}/package/${lowerCaseProductName}" includes="lib/_client-script.sh,lib/_script-util.sh,lib/_server-script.sh,lib/_mixed-script.sh" filemode="755" dirmode="755" prefix="${subfolderName}" />
+									<zipfileset dir="${project.build.directory}/package/${lowerCaseProductName}" includes="bin/*" filemode="755" dirmode="755" prefix="${subfolderName}" />
+									<zipfileset dir="${project.build.directory}/package/${lowerCaseProductName}" includes="setup,uninstall,upgrade,QuickSetup.app/Contents/MacOS/universalJavaApplicationStub,Uninstall.app/Contents/MacOS/universalJavaApplicationStub,bin/ControlPanel.app/Contents/MacOS/universalJavaApplicationStub" filemode="755" dirmode="755" prefix="${subfolderName}" />
+									<zipfileset dir="${project.build.directory}/package/${lowerCaseProductName}" includes="template/**/*" filemode="444" dirmode="744" prefix="${subfolderName}" />
+								</zip>
+								<attachartifact file="${project.build.directory}/package/${product.name}.zip" type="zip" />
               </target>
             </configuration>
           </execution>
