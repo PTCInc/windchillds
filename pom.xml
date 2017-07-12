@@ -79,7 +79,9 @@
         <repository>
             <id>forgerock-staging-repository</id>
             <name>ForgeRock Release Repository</name>
-            <url>http://maven.forgerock.org/repo/releases</url>
+            <url>file://${maven.repo.local}</url>
+			<!-- Can not use forgerock URL as its now access controlled -->
+			<!--url>http://maven.forgerock.org/repo/releases</url-->
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
