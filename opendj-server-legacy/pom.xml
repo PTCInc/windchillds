@@ -1193,6 +1193,29 @@
               </target>
             </configuration>
           </execution>
+
+	<!-- create version file -->
+		  <execution>
+            <id>prepare-version-file</id>
+            <phase>package</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+				<echo message="WindchillDSVersion=${subfolderName}${line.separator}" file="${project.build.directory}/package/version" append="true"/>
+				<echo message="BaseSVNRevisionNumber=NA${line.separator}" file="${project.build.directory}/package/version" append="true"/>
+				<tstamp>
+					<format property="Built.ts" pattern="EEE MMM dd HH:mm:ss zzz yyyy" />
+				</tstamp>
+				<echo message="Package Built: ${Built.ts}"/>
+				<echo message="WindchillDSBuildDate=${Built.ts}${line.separator}" file="${project.build.directory}/package/version" append="true"/>
+              </target>
+            </configuration>
+		  </execution>
+		
+		
+		
         </executions>
       </plugin>
 
