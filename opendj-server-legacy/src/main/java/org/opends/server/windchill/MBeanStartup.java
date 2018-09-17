@@ -160,7 +160,7 @@ public class  MBeanStartup
 	    	  File file = new File(System.getProperty( WDS_INSTALL_ROOT)+File.separator+"config"+File.separator+"WDSMBeanConfig.xml");
 			  if(file.exists()) {
 				  configFile = System.getProperty( WDS_INSTALL_ROOT)+"/config/WDSMBeanConfig.xml";
-				  System.out.println("File fouund "+configFile);
+				  System.out.println("File found "+configFile);
 			  }
     	  }catch(Exception e) {
     		  e.printStackTrace();
