@@ -28,11 +28,10 @@
 
 package org.opends.quicksetup.installer;
 
+import static com.forgerock.opendj.cli.Utils.getThrowableMsg;
+import static com.forgerock.opendj.util.OperatingSystem.isWindows;
 import static org.opends.messages.QuickSetupMessages.*;
-import static org.opends.quicksetup.util.Utils.*;
-
-import static com.forgerock.opendj.cli.Utils.*;
-import static com.forgerock.opendj.util.OperatingSystem.*;
+import static org.opends.quicksetup.util.Utils.areDnsEqual;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -60,9 +59,19 @@ import javax.naming.ldap.InitialLdapContext;
 import org.forgerock.i18n.LocalizableMessage;
 import org.forgerock.i18n.slf4j.LocalizedLogger;
 import org.forgerock.opendj.config.server.ConfigException;
+import org.forgerock.opendj.server.config.client.BackendCfgClient;
+import org.forgerock.opendj.server.config.client.CryptoManagerCfgClient;
+import org.forgerock.opendj.server.config.client.ReplicationDomainCfgClient;
+import org.forgerock.opendj.server.config.client.ReplicationServerCfgClient;
+import org.forgerock.opendj.server.config.client.ReplicationSynchronizationProviderCfgClient;
+import org.forgerock.opendj.server.config.client.RootCfgClient;
+import org.forgerock.opendj.server.config.meta.BackendCfgDefn;
+import org.forgerock.opendj.server.config.meta.ReplicationDomainCfgDefn;
+import org.forgerock.opendj.server.config.meta.ReplicationServerCfgDefn;
+import org.forgerock.opendj.server.config.meta.ReplicationSynchronizationProviderCfgDefn;
+import org.forgerock.opendj.server.config.server.BackendCfg;
 import org.opends.guitools.controlpanel.util.Utilities;
 import org.opends.messages.BackendMessages;
-import org.opends.messages.CoreMessages;
 import org.opends.messages.ReplicationMessages;
 import org.opends.quicksetup.Application;
 import org.opends.quicksetup.ApplicationException;
@@ -78,17 +87,6 @@ import org.opends.server.admin.PropertyException;
 import org.opends.server.admin.client.ManagementContext;
 import org.opends.server.admin.client.ldap.JNDIDirContextAdaptor;
 import org.opends.server.admin.client.ldap.LDAPManagementContext;
-import org.opends.server.admin.std.client.BackendCfgClient;
-import org.opends.server.admin.std.client.CryptoManagerCfgClient;
-import org.opends.server.admin.std.client.ReplicationDomainCfgClient;
-import org.opends.server.admin.std.client.ReplicationServerCfgClient;
-import org.opends.server.admin.std.client.ReplicationSynchronizationProviderCfgClient;
-import org.opends.server.admin.std.client.RootCfgClient;
-import org.opends.server.admin.std.meta.BackendCfgDefn;
-import org.opends.server.admin.std.meta.ReplicationDomainCfgDefn;
-import org.opends.server.admin.std.meta.ReplicationServerCfgDefn;
-import org.opends.server.admin.std.meta.ReplicationSynchronizationProviderCfgDefn;
-import org.opends.server.admin.std.server.BackendCfg;
 import org.opends.server.backends.task.TaskState;
 import org.opends.server.core.DirectoryServer;
 import org.opends.server.tools.ConfigureDS;
@@ -104,6 +102,8 @@ import org.opends.server.util.LDIFException;
 import org.opends.server.util.LDIFWriter;
 import org.opends.server.util.SetupUtils;
 import org.opends.server.util.StaticUtils;
+
+import com.forgerock.opendj.ldap.CoreMessages;
 
 /**
  * This is the only class that uses classes in org.opends.server (excluding the
@@ -950,7 +950,13 @@ public class InstallerHelper {
       }
       else
       {
-        args.put(script, transformedJavaArg);
+        //Fix certificate related issue related with JDK 8u181 update.
+    	if("control-panel".equalsIgnoreCase(script)) {
+        	ArrayList<String> arr = new ArrayList<>(Arrays.asList(transformedJavaArg.getAdditionalArguments()));
+        	arr.add("-Dcom.sun.jndi.ldap.object.disableEndpointIdentification=true");
+        	transformedJavaArg.setAdditionalArguments(arr.toArray(new String [arr.size()]));
+        }
+    	  args.put(script, transformedJavaArg);
       }
     }
 
