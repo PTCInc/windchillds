@@ -929,6 +929,13 @@ public class InstallerHelper {
         }
       }
       // else, support is already checked.
+      //check added to fix control panel login and dsreplication issue with JDK8u181+
+      if("dsreplication".equalsIgnoreCase(script) || "control-panel".equalsIgnoreCase(script)) {	    
+	ArrayList<String> arr = new ArrayList<String>(Arrays.asList(origJavaArguments.getAdditionalArguments()));
+	arr.add("-Dcom.sun.jndi.ldap.object.disableEndpointIdentification=true");
+	origJavaArguments.setAdditionalArguments(arr.toArray(new String [arr.size()]));
+	hmJavaArguments.put(origJavaArguments, origJavaArguments);
+      }
     }
 
     Properties fileProperties = getJavaPropertiesFileContents(getPropertiesFileName(installPath));
@@ -950,11 +957,6 @@ public class InstallerHelper {
       }
       else
       {
-	if("control-panel".equalsIgnoreCase(script)) {
-	  ArrayList<String> arr = new ArrayList<String>(Arrays.asList(transformedJavaArg.getAdditionalArguments()));
-	  arr.add("-Dcom.sun.jndi.ldap.object.disableEndpointIdentification=true");
-	  transformedJavaArg.setAdditionalArguments(arr.toArray(new String [arr.size()]));
-	}
 	args.put(script, transformedJavaArg);
       }
     }
