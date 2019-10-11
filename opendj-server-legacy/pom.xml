@@ -92,7 +92,7 @@
     </opendj.osgi.import.additional>
 
   </properties>
-
+ 
   <dependencies>
     <!-- ForgeRock libraries -->
     <dependency>
