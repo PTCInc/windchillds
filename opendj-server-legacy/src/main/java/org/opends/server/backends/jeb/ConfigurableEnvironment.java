@@ -62,6 +62,7 @@ import org.opends.server.types.DN;
 import com.sleepycat.je.Durability;
 import com.sleepycat.je.EnvironmentConfig;
 import com.sleepycat.je.dbi.MemoryBudget;
+import com.sleepycat.je.utilint.JVMSystemUtils;
 import org.opends.server.util.Platform;
 
 /** This class maps JE properties to configuration attributes. */
@@ -437,10 +438,10 @@ public class ConfigurableEnvironment
   {
     if (dbCacheSize != 0)
     {
-      if (MemoryBudget.getRuntimeMaxMemory() < dbCacheSize)
+      if (JVMSystemUtils.getRuntimeMaxMemory() < dbCacheSize)
       {
         throw new ConfigException(ERR_BACKEND_CONFIG_CACHE_SIZE_GREATER_THAN_JVM_HEAP.get(
-            dbCacheSize, MemoryBudget.getRuntimeMaxMemory()));
+            dbCacheSize, JVMSystemUtils.getRuntimeMaxMemory()));
       }
       if (dbCacheSize < MemoryBudget.MIN_MAX_MEMORY_SIZE)
       {
