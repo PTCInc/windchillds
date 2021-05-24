@@ -45,6 +45,7 @@ import org.forgerock.opendj.ldap.GeneralizedTime;
 import org.forgerock.opendj.ldap.ModificationType;
 import org.forgerock.opendj.ldap.ResultCode;
 import org.forgerock.opendj.ldap.SearchScope;
+import org.opends.admin.ads.util.TrustedSocketFactory;
 import org.opends.server.admin.server.ConfigurationChangeListener;
 import org.opends.server.admin.std.meta.LDAPPassThroughAuthenticationPolicyCfgDefn.MappingPolicy;
 import org.opends.server.admin.std.server.LDAPPassThroughAuthenticationPolicyCfg;
@@ -1277,9 +1278,8 @@ public final class LDAPPassThroughAuthenticationPolicyFactory implements
                 tm = trustManagerProvider.getTrustManagers();
               }
             }
-
             // Create the SSL context and initialize it.
-            final SSLContext sslContext = SSLContext.getInstance("TLS");
+            final SSLContext sslContext = SSLContext.getInstance(TrustedSocketFactory.TLS_PROTOCOL_VERSION);
             sslContext.init(null /* key managers */, tm, null /* rng */);
 
             // Create the SSL socket.

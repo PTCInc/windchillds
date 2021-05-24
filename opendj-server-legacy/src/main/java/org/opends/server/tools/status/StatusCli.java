@@ -44,6 +44,7 @@ import java.net.URI;
 import java.security.GeneralSecurityException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -73,6 +74,7 @@ import org.forgerock.opendj.ldap.TrustManagers;
 import org.forgerock.util.Options;
 import org.forgerock.util.time.Duration;
 import org.opends.admin.ads.util.ApplicationTrustManager;
+import org.opends.admin.ads.util.TrustedSocketFactory;
 import org.opends.guitools.controlpanel.datamodel.BackendDescriptor;
 import org.opends.guitools.controlpanel.datamodel.BaseDNDescriptor;
 import org.opends.guitools.controlpanel.datamodel.BaseDNTableModel;
@@ -243,7 +245,6 @@ public class StatusCli extends ConsoleApplication
       argParser.displayMessageAndUsageReference(getErrStream(), ERR_ERROR_PARSING_ARGS.get(ae.getMessage()));
       return ReturnCode.CLIENT_SIDE_PARAM_ERROR.get();
     }
-
     //  If we should just display usage or version information,
     // then print it and exit.
     if (argParser.usageOrVersionDisplayed()) {
@@ -1182,10 +1183,14 @@ public class StatusCli extends ConsoleApplication
       try
       {
         final SSLContextBuilder sslBuilder = new SSLContextBuilder();
+        sslBuilder.setProtocol(TrustedSocketFactory.TLS_PROTOCOL_VERSION);
         sslBuilder.setTrustManager(trustManager == null ? TrustManagers.trustAll() : trustManager);
         sslBuilder.setKeyManager(keyManager);
         options.set(SSL_USE_STARTTLS, ci.useStartTLS());
         options.set(SSL_CONTEXT, sslBuilder.getSSLContext());
+        ArrayList<String> ls = new ArrayList<>();
+        ls.add(TrustedSocketFactory.TLS_PROTOCOL_VERSION);
+        options.set(SSL_ENABLED_PROTOCOLS, ls);
 
         factory = new LDAPConnectionFactory(hostName, portNumber, options);
         connection = factory.getConnection();

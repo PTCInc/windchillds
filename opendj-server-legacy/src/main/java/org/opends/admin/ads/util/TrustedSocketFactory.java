@@ -28,18 +28,17 @@
 package org.opends.admin.ads.util;
 
 import java.io.IOException;
-import java.net.Socket;
 import java.net.InetAddress;
-import java.util.Map;
-import java.util.HashMap;
-
+import java.net.Socket;
 import java.security.GeneralSecurityException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.net.SocketFactory;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.SSLKeyException;
+import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 
 /**
@@ -56,6 +55,7 @@ public class TrustedSocketFactory extends SSLSocketFactory
   private SSLSocketFactory innerFactory;
   private TrustManager trustManager;
   private KeyManager   keyManager;
+  public static final String TLS_PROTOCOL_VERSION = System.getProperty("TLS_PROTOCOL_VERSION", "TLSv1.2");
 
   /**
    * Constructor of the TrustedSocketFactory.
@@ -256,7 +256,7 @@ public class TrustedSocketFactory extends SSLSocketFactory
   private SSLSocketFactory getInnerFactory() throws IOException {
     if (innerFactory == null)
     {
-      String algorithm = "TLSv1";
+      String algorithm = TrustedSocketFactory.TLS_PROTOCOL_VERSION;
       SSLKeyException xx;
       KeyManager[] km = null;
       TrustManager[] tm = null;

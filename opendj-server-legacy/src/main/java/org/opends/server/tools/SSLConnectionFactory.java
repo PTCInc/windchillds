@@ -27,6 +27,8 @@
 package org.opends.server.tools;
 
 
+import static org.opends.messages.ToolMessages.*;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -43,13 +45,12 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
-import org.opends.server.extensions.BlindTrustManagerProvider;
 import org.forgerock.i18n.slf4j.LocalizedLogger;
+import org.opends.admin.ads.util.TrustedSocketFactory;
+import org.opends.server.extensions.BlindTrustManagerProvider;
 import org.opends.server.util.CollectionUtils;
 import org.opends.server.util.ExpirationCheckTrustManager;
 import org.opends.server.util.SelectableCertificateKeyManager;
-
-import static org.opends.messages.ToolMessages.*;
 
 
 /**
@@ -93,7 +94,7 @@ public class SSLConnectionFactory
   {
     try
     {
-      SSLContext ctx = SSLContext.getInstance("TLS");
+      SSLContext ctx = SSLContext.getInstance(TrustedSocketFactory.TLS_PROTOCOL_VERSION);
       KeyManager[] keyManagers = null;
       TrustManager[] trustManagers = null;
 
